@@ -6,8 +6,8 @@
  */
 
 namespace PHPPie\File;
-use Symfony\Yaml\Parser;
-use Symfony\Yaml\Dumper;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Dumper;
 
 class Yaml extends File {
     public function __construct($pathFile)
