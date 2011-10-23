@@ -1,9 +1,5 @@
 <?php
 require_once "index.php";
-
-//use PHPPie\File as JSONFile;
-use PHPPie\File as YamlFile;
-
 use PHPPie\File\Json as JsonFile;
 use PHPPie\File\Yaml as YamlFile;
 
