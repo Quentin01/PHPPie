@@ -245,8 +245,8 @@ abstract class File {
         return $this->getPath();
     }
 
-    abstract public function readArray();
-    abstract public function writeArray(array $array);
+    abstract public function readData();
+    abstract public function writeData($data);
 }
 
 ?>

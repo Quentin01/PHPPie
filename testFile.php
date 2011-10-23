@@ -13,7 +13,7 @@ $array = array(
     'test2' => 'e'
 );
 
-$file->writeArray($array);
+$file->writeData($array);
 echo $file->getContents();
 
 $file->del();
