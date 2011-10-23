@@ -29,8 +29,16 @@ abstract class File {
                 throw new \Exception('Permission denied to create directory : ' . dirname($pathFile));
         }
         
-        file_put_contents($pathFile, '');
-        return new self($pathFile);
+        if(file_put_contents($pathFile, '') !== false)
+        {
+            $file = new static($pathFile);
+            $file->chmod(0777);
+            return $file;
+        }
+        else
+        {
+            throw new \Exception('Permission denied to create file : ' . $pathFile);
+        }
     }
 
     public function exists($pathFile = null) {
@@ -79,6 +87,16 @@ abstract class File {
             return file_get_contents($this->pathFile);
         elseif ($this->exists($pathFile))
             return file_get_contents($pathFile);
+        else
+            throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
+    }
+    
+    public function setContents($contents, $pathFile = null)
+    {
+        if (is_null($pathFile))
+            return (file_put_contents($this->pathFile, $contents) !== false);
+        elseif ($this->exists($pathFile))
+            return (file_put_contents($pathFile, $contents) !== false);
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
@@ -212,6 +230,7 @@ abstract class File {
     }
 
     abstract public function toArray();
+    abstract public function writeArray(array $array);
 }
 
 ?>
