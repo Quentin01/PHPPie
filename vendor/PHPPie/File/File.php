@@ -81,6 +81,22 @@ abstract class File {
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
     
+    public function getExtension($pathFile = null)
+    {
+        if (is_null($pathFile))
+        {
+            $extension = explode('.', $this->name);
+            return $extension[1];
+        }
+        elseif ($this->exists($pathFile))
+        {
+            $extension = explode('.', $this->getName($pathFile));
+            return $extension[1];
+        }
+        else
+            throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
+    }
+    
     public function getContents($pathFile = null)
     {
         if (is_null($pathFile))
