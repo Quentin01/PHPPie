@@ -28,16 +28,20 @@ abstract class File {
             if (!mkdir(dirname($pathFile), 0777, true))
                 throw new \Exception('Permission denied to create directory : ' . dirname($pathFile));
         }
-        
-        if(file_put_contents($pathFile, '') !== false)
-        {
-            $file = new static($pathFile);
-            $file->chmod(0777);
-            return $file;
+
+        if (!file_exists($pathFile)) {
+            if (file_put_contents($pathFile, '') !== false) {
+                $file = new static($pathFile);
+                $file->chmod(0777);
+                return $file;
+            } else {
+                throw new \Exception('Permission denied to create file : ' . $pathFile);
+            }
         }
         else
         {
-            throw new \Exception('Permission denied to create file : ' . $pathFile);
+            $file = new static($pathFile);
+            return $file;
         }
     }
 
@@ -65,14 +69,12 @@ abstract class File {
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
-    
-    public function getPath()
-    {
+
+    public function getPath() {
         return $this->pathFile;
     }
-    
-    public function getName($pathFile = null)
-    {
+
+    public function getName($pathFile = null) {
         if (is_null($pathFile))
             return $this->name;
         elseif ($this->exists($pathFile))
@@ -80,25 +82,20 @@ abstract class File {
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
-    
-    public function getExtension($pathFile = null)
-    {
-        if (is_null($pathFile))
-        {
+
+    public function getExtension($pathFile = null) {
+        if (is_null($pathFile)) {
             $extension = explode('.', $this->name);
             return $extension[1];
-        }
-        elseif ($this->exists($pathFile))
-        {
+        } elseif ($this->exists($pathFile)) {
             $extension = explode('.', $this->getName($pathFile));
             return $extension[1];
         }
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
-    
-    public function getContents($pathFile = null)
-    {
+
+    public function getContents($pathFile = null) {
         if (is_null($pathFile))
             return file_get_contents($this->pathFile);
         elseif ($this->exists($pathFile))
@@ -106,9 +103,8 @@ abstract class File {
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
-    
-    public function setContents($contents, $pathFile = null)
-    {
+
+    public function setContents($contents, $pathFile = null) {
         if (is_null($pathFile))
             return (file_put_contents($this->pathFile, $contents) !== false);
         elseif ($this->exists($pathFile))
@@ -239,13 +235,13 @@ abstract class File {
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
-    
-    public function __tostring()
-    {
+
+    public function __tostring() {
         return $this->getPath();
     }
 
     abstract public function readData();
+
     abstract public function writeData($data);
 }
 
