@@ -14,12 +14,24 @@ class JSON extends File {
         
         if($this->getExtension() != 'json')
         {
-            $this->del();
             throw new \Exception('File '.$this->pathFile.' isn\'t a JSON\' file');
         }
     }
     
-    public function toArray()
+    public static function create($pathFile)
+    {
+        $file = parent::create($pathFile);
+        
+        if($file->getExtension() != 'json')
+        {
+            $file->del();
+            throw new \Exception('File '.$file->pathFile.' isn\'t a JSON\' file');
+        }
+        
+        return $file;
+    }
+    
+    public function readArray()
     {
         return json_decode($this->getContents());
     }
