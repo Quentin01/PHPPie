@@ -72,6 +72,16 @@ abstract class File {
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
     }
+    
+    public function getContents($pathFile = null)
+    {
+        if (is_null($pathFile))
+            return file_get_contents($this->pathFile);
+        elseif ($this->exists($pathFile))
+            return file_get_contents($pathFile);
+        else
+            throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
+    }
 
     public function del($pathFile = null) {
         if (is_null($pathFile)) {
@@ -194,6 +204,11 @@ abstract class File {
             return is_readable($pathFile);
         else
             throw new \Exception('File ' . $pathFile . ' doesn\'t exists');
+    }
+    
+    public function __tostring()
+    {
+        return $this->getPath();
     }
 
     abstract public function toArray();
