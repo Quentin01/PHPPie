@@ -21,7 +21,7 @@ class File
 	 */
 	public function exists()
 	{
-		return (file_exists($this->file))
+		return file_exists($this->file);
 	}
 	
 	/**
@@ -54,7 +54,7 @@ class File
 	 */
 	public function del()
 	{
-		return unlink($this->file)
+		return unlink($this->file);
 	}
 
 	/**
@@ -62,7 +62,7 @@ class File
 	 * @param string $newName Le nouveau nom du fichier
 	 * @return bool True si le renommage a marché, false sinon
 	 */
-	public function rename($newName = null)
+	public function rename($newName)
 	{
 		if ($newName != null)
 		{
@@ -122,7 +122,7 @@ class File
 	 {
 	 	if (is_int($permissions))
 	 	{
-		 	return chmod($this->file, $permissions)
+		 	return chmod($this->file, $permissions);
 		}
 
 		else
