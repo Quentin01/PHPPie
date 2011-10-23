@@ -21,15 +21,7 @@ class File
 	 */
 	public function exists()
 	{
-		if (file_exists($this->file))
-		{
-			return false;
-		}
-
-		else
-		{
-			return false;
-		}
+		return (file_exists($this->file))
 	}
 	
 	/**
@@ -62,15 +54,7 @@ class File
 	 */
 	public function del()
 	{
-		if (unlink($this->file))
-		{
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
+		return unlink($this->file)
 	}
 
 	/**
@@ -126,15 +110,7 @@ class File
 	 */
 	public function copy($newName)
 	{
-		if (copy($this->file, $newName))
-		{
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
+		return copy($this->file, $newName);
 	}
 
 	/**
@@ -146,15 +122,7 @@ class File
 	 {
 	 	if (is_int($permissions))
 	 	{
-		 	if (chmod($this->file, $permissions))
-		 	{
-		 		return true;
-		 	}
-
-		 	else
-		 	{
-		 		return false;
-		 	}
+		 	return chmod($this->file, $permissions)
 		}
 
 		else
@@ -170,15 +138,7 @@ class File
 	 */
 	public function isWritable()
 	{
-		if (is_writable($this->file))
-		{
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
+		return is_writable($this->file);
 	}
 
 	/**
@@ -187,15 +147,7 @@ class File
 	 */
 	public function isReadable()
 	{
-		if (is_readable($this->file))
-		{
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
+		return is_readable($this->file);
 	}
 	
 	abstract public function toArray()
