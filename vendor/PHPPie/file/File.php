@@ -14,6 +14,23 @@ class File
 	{
 		$this->file = $file;
 	} 
+
+	/**
+	 *	Retourne si le fichier existe
+	 *	@return bool 	Si le fichier existe, true sinon false;
+	 */
+	public function exists()
+	{
+		if (file_exists($this->file))
+		{
+			return false;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 *	Retourne la taille d'un fichier
@@ -67,6 +84,7 @@ class File
 		{
 			if (rename($this->file, $newName))
 			{
+				$this->file = $newName;
 				return true;
 			}
 
@@ -80,5 +98,108 @@ class File
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Deplace un fichier
+	 * @param string $newPath le dossier de destination
+	 * @return bool True si ça marche et False en cas d'échec
+	 */
+	public function move($newPath)
+	{
+		if (copy($this->file, $newPath))
+		{
+			$this->del($this->file);
+			$this->file = $newPath;
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+	/**
+	 * Copie un fichier
+	 * @param string $newName le dossier et le nom nouveau nom
+	 * @return bool True si ça marche et False si ça ne marche pas
+	 */
+	public function copy($newName)
+	{
+		if (copy($this->file, $newName))
+		{
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Change les permissions d'un fichier
+	 * @param int $permissions Nouvelles permissions. Du type 0755.  
+	 * @return bool True si ça marche False sinon
+	 */
+	 public function chmod($permissions)
+	 {
+	 	if (is_int($permissions))
+	 	{
+		 	if (chmod($this->file, $permissions))
+		 	{
+		 		return true;
+		 	}
+
+		 	else
+		 	{
+		 		return false;
+		 	}
+		}
+
+		else
+		{
+			//A faire avec des exceptions pour le gestionnaire d'erreurs
+			return false;
+		}
+	 }
+
+	/**
+	 * Retourne si le fichier est disponible en écriture
+	 * @return bool True si oui, False sinon
+	 */
+	public function isWritable()
+	{
+		if (is_writable($this->file))
+		{
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Retourne si le fichier est disponible en lecture
+	 * @return bool True si oui, False sinon
+	 */
+	public function isReadable()
+	{
+		if (is_readable($this->file))
+		{
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+	
+	abstract public function toArray()
+	{
+		
 	}
 }
