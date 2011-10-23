@@ -19,7 +19,7 @@ class JSON extends File {
         }
     }
     
-    public function toArray()
+    public function readArray()
     {
         return json_decode($this->getContents());
     }
