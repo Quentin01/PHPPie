@@ -7,7 +7,7 @@
 
 namespace PHPPie\File;
 
-class JSON extends File {
+class Json extends File {
     public function __construct($pathFile)
     {
         parent::__construct($pathFile);
