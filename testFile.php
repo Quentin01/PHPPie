@@ -1,7 +1,7 @@
 <?php
 require_once "index.php";
-use PHPPie\File\JSON as JSONFile;
-use PHPPie\File\Yaml as YamlFile;
+//use PHPPie\File as JSONFile;
+use PHPPie\File as YamlFile;
 
 $file = YamlFile::create(__DIR__.'/fichier.yml');
 echo $file->getSize()."<br/>";
