@@ -6,7 +6,7 @@ $autoloader = new PHPPie\Autoload\Autoloader();
 $autoloader->registerNamespaces(array(
     'PHPPie'           => __DIR__.'/vendor/PHPPie',
     'Doctrine'         => __DIR__.'/vendor/Doctrine',
-    'Symfony'          => __DIR__.'/vendor/Doctrine/Symfony',
+    'Symfony'          => __DIR__.'/vendor/Doctrine/Symfony/Component',
 ));
 
 $autoloader->registerPrefixes(array(
