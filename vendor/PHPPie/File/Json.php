@@ -31,14 +31,14 @@ class Json extends File {
         return $file;
     }
     
-    public function readArray()
+    public function readData()
     {
         return json_decode($this->getContents());
     }
     
-    public function writeArray(array $array)
+    public function writeData($data)
     {
-        return $this->setContents(json_encode($array));
+        return $this->setContents(json_encode($data));
     }
 }
 

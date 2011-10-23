@@ -33,16 +33,16 @@ class Yaml extends File {
         return $file;
     }
     
-    public function readArray()
+    public function readData()
     {
         $yaml = new Parser();
         return $yaml->parse($this->getContents);
     }
     
-    public function writeArray(array $array)
+    public function writeData($data)
     {
         $dumper = new Dumper();
-        return $this->setContents($dumper->dump($array));
+        return $this->setContents($dumper->dump($data));
     }
 }
 
