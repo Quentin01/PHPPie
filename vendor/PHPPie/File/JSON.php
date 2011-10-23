@@ -2,7 +2,7 @@
 
 /*
  * Class JSON files manager
- * Create on 23/10/11 at 15:53
+ * Created on 23/10/11 at 15:53
  */
 
 namespace PHPPie\File;

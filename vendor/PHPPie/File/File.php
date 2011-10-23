@@ -2,7 +2,7 @@
 
 /*
  * Class files manager
- * Create on 23/10/11 at 09:34
+ * Created on 23/10/11 at 09:34
  */
 
 namespace PHPPie\File;
