@@ -67,9 +67,10 @@ class Autoloader {
                 if (0 !== strpos($namespace, $ns)) {
                     continue;
                 }
-
+                
                 foreach ($dirs as $dir) {
                     $className = substr($class, $pos + 1);
+                    $namespace = substr($namespace, strlen($ns) + 1);
                     $file = $dir . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
                     if (file_exists($file)) {
                         return $file;
