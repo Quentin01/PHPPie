@@ -75,6 +75,12 @@ abstract class File
 	 */
 	public function move($newPath)
 	{
+                if(!is_dir(realpath(dirname($newPath))))
+                {
+                    if(!mkdir(realpath(dirname($newPath)), 0755, true))
+                        return false;
+                }
+                
 		if (copy($this->file, $newPath))
 		{
 			$this->del($this->file);
@@ -89,12 +95,18 @@ abstract class File
 	}
 	/**
 	 * Copie un fichier
-	 * @param string $newName le dossier et le nom nouveau nom
+	 * @param string $newPath le nouveau chemin avec le nom du fichier
 	 * @return bool True si ça marche et False si ça ne marche pas
 	 */
-	public function copy($newName)
+	public function copy($newPath)
 	{
-		return copy($this->file, $newName);
+                if(!is_dir(realpath(dirname($newPath))))
+                {
+                    if(!mkdir(realpath(dirname($newPath)), 0755, true))
+                        return false;
+                }
+                
+		return copy($this->file, $newPath);
 	}
 
 	/**
