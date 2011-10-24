@@ -33,12 +33,13 @@ class PHP extends File {
     
     public function readData()
     {
-        return $this->getContents();
+        include $this->pathFile;
+        return $data;
     }
     
     public function writeData($data)
     {
-        return $this->setContents($data);
+        return $this->setContents("<?php $data = unserialize('".serialize($data)."');");
     }
 }
 
