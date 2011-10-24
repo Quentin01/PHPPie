@@ -23,5 +23,5 @@ $file = XMLFile::create(__DIR__.'/fichier.xml');
 $file->writeData($xml);
 print_r($file->readData());
 
-//$file->del();
+$file->del();
 ?>
