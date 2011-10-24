@@ -36,7 +36,7 @@ class Yaml extends File {
     public function readData()
     {
         $yaml = new Parser();
-        return $yaml->parse($this->getContents);
+        return $yaml->parse($this->getContents());
     }
     
     public function writeData($data)
