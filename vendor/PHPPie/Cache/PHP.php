@@ -37,9 +37,40 @@ class PHP{
 		}
 	}
 
-	public function isFresh($id)
+	public function isFresh($id, $dateLastModifFile, $maxCacheLifeTime = 0)
 	{
-		
+		if ($this->isset($id))
+		{
+			if (is_string($dateLastModifFile))
+			{
+				$dateLastModifFile = intval($dateLastModifFile);
+			}
+
+			$id = md5($id);
+			$nameFile = $this->cachePath.$id;
+			$dateLastModificationCache = filemtime($nameFile);
+			$actualTime = time();
+			
+			if ($dateLastModificationCache < $dateLastModifFile)
+			{
+				return False;
+			}
+
+			elseif ($maxCacheLifeTime != 0 AND $actualTime > $dateLastModificationCache + $maxCacheLifeTime)
+			{
+				return False;
+			}
+
+			else
+			{
+				return True;
+			}
+		}
+
+		else
+		{
+			throw new \Exception('Cache '.$id.' doesn\'t exists');
+		}
 	}
 	
 	public function isset($id)
