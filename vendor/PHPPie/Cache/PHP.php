@@ -16,17 +16,17 @@ class PHP{
 		
 	}
 
-	public function add($name, $fileToCache)
+	public function add($name, $toCache)
 	{
-		$id = md5($this->cachePath.$name);
-		$file = $fileToCache->readData();
+		$id = md5($name);
 		$cache = create::PHPFile($this->cachePath.$id);
-		$cache->writeData(serialize($file));
+		$cache->writeData('<?php $data = unserialize('.serialize($toCache).'); ?>');
 	}
 
 	public function del($id)
 	{
-		
+		$cache = new PHPFile($this->cachePath.$id);
+		$cache->del();
 	}
 
 	public function isFresh($id)
