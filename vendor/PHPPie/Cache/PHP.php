@@ -9,7 +9,7 @@ namespace PHPPie\File;
 
 class PHP{
 
-	private cachePath = 'path/to/cache';
+	private $cachePath = 'path/to/cache';
 
 	public function __construct()
 	{
