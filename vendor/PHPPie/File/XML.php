@@ -42,28 +42,12 @@ class XML extends File {
     
     /**
      * convertit un objet SimpleXMLElement en fichier XML.
-     * @param object Objet SimpleXMLElement
+     * @param object SimpleXMLElement SimpleXMLElement
      * @return bool True si ça a marché ou False si ça n'a pas marché.
      */
-    public function writeData($data)
+    public function writeData(SimpleXMLElement $data)
     {
-        if (is_object($data))
-        {
-            if (get_class($data) == 'SimpleXMLElement')
-            {
-                return $this->setContents($data->asXML());
-            }
-
-            else
-            {
-                throw new \Exception('$data isn\'t a SimpleXMLElement object.');
-            }
-        }
-
-        else
-        {
-            throw new \Exception('$data isn\'t an object.');
-        }
+        return $this->setContents($data->asXML());
     }
 }
 
