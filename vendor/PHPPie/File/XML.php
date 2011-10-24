@@ -47,10 +47,17 @@ class XML extends File {
      */
     public function writeData($data)
     {
-        if($data instanceof SimpleXMLElement)
-            return $this->setContents($data->asXML());
+        if(is_object($data))
+        {
+            if(get_class($data) === "SimpleXMLElement")
+                return $this->setContents($data->asXML());
+            else
+                throw new \Exception('Data isn\'t a SimpleXMLElement object');
+        }
         else
-            throw new \Exception('Data isn\'t a SimpleXMLElement object');
+        {
+            throw new \Exception('Data isn\'t a object');
+        }
     }
 }
 
