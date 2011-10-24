@@ -10,7 +10,7 @@ $autoloader->registerNamespaces(array(
 ));
 
 $autoloader->registerPrefixes(array(
-    'Twig_' => __DIR__.'/vendor/Twig',
+    'Twig_'            => __DIR__.'/vendor/Twig',
 ));
 
 $autoloader->registerNamespaceFallbacks(array(

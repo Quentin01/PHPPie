@@ -18,17 +18,20 @@ class PHP{
 
 	public function add($id, $data)
 	{
-		$id = md5($id);
-		$cache = create::PHPFile($this->cachePath.$id);
+		$cache = create::PHPFile($this->getPath($id));
 		$cache->writeData($data);
 	}
+        
+        public function getPath($id)
+        {
+            return $this->cachePath.DIRECTORY_SEPARATOR.md5($id);
+        }
 
 	public function del($id)
 	{
-		if($this->isset($id))
+		if($this->exists($id))
 		{
-			$id = md5($id);
-			$cache = new PHPFile($this->cachePath.$id);
+			$cache = new PHPFile($this->getPath($id));
 			$cache->del();
 		}
 		else
@@ -37,51 +40,43 @@ class PHP{
 		}
 	}
 
-	public function isFresh($id, $dateLastModifFile, $maxCacheLifeTime = 0)
+	public function isFresh($id, $timeLastUpdateData, $maxTime = 0)
 	{
-		if ($this->isset($id))
+		if($this->exists($id))
 		{
-			if (is_string($dateLastModifFile))
+			if (is_string($timeLastUpdateData))
 			{
-				$dateLastModifFile = intval($dateLastModifFile);
+				$timeLastUpdateData = filemtime($timeLastUpdateData);
 			}
 
-			$id = md5($id);
-			$nameFile = $this->cachePath.$id;
-			$dateLastModificationCache = filemtime($nameFile);
-			$actualTime = time();
+			$timeLastUpdateCache = filemtime($this->getPath($id));
 			
-			if ($dateLastModificationCache < $dateLastModifFile)
+			if ($timeLastUpdateCache < $timeLastUpdateData)
 			{
-				return False;
+                            return false;
 			}
-
-			elseif ($maxCacheLifeTime != 0 AND $actualTime > $dateLastModificationCache + $maxCacheLifeTime)
-			{
-				return False;
-			}
-
+                        elseif($maxTime != 0 && time() > ($timeLastUpdateCache + $maxTime))
+                        {
+                            return false;
+                        }
 			else
 			{
-				return True;
+                            return True;
 			}
 		}
-
 		else
 		{
-			throw new \Exception('Cache '.$id.' doesn\'t exists');
+                    return false;
 		}
 	}
 	
-	public function isset($id)
+	public function exists($id)
 	{
-		$id = md5($id);
-		
 		try
 		{
-			$cache = new PHPFile($this->cachePath.$id);
+			$cache = new PHPFile($this->getPath($id));
 		}
-		catch($e)
+		catch(\Exception $e)
 		{
 			return false;
 		}
@@ -91,10 +86,9 @@ class PHP{
 
 	public function get($id)
 	{
-		if($this->isset($id))
+		if($this->exists($id))
 		{
-			$id = md5($id);
-			$cache = new PHPFile($this->cachePath.$id);
+			$cache = new PHPFile($this->getPath($id));
 			return $cache->readData();
 		}
 		else
