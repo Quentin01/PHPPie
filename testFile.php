@@ -2,7 +2,6 @@
 require_once "index.php";
 use PHPPie\File\Json as JsonFile;
 use PHPPie\File\XML as XMLFile;
-use PHPFile\Exception as Exception;
 
 $string = <<<XML
 <a>
@@ -15,14 +14,6 @@ $string = <<<XML
  </d>
 </a>
 XML;
-
-try{
-$xml = new SimpleXMLElement($string);
-}
-catch(Exception $e)
-{
-	echo $e;
-}
 
 //print_r($xml);
 

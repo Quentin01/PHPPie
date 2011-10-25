@@ -21,7 +21,7 @@ class Exception extends \Exception{
 	 */ 
 	public function __construct($message = null, $class = null, $method = null)
 	{
-		parent::__construct($message, $code);
+		parent::__construct($message);
 		$this->class = $class;
 		$this->method = $method;
 	}
@@ -32,6 +32,19 @@ class Exception extends \Exception{
 	 */ 
 	public function __toString()
 	{
-		return 'Error : '.$this->message.' on line '.$this->line.' on class '.$this->class.' and method '.$this->method.' in '.$this->file.'.';
+            $message = 'Error : '.$this->message;
+            
+            if(!is_null($this->class))
+            {
+                $message .= ' on class '.$this->class;
+            }
+            
+            if(!is_null($this->method))
+            {
+                $message .= ' and method '.$this->method;
+            }
+            
+            $message .= ' on line '.$this->line.' in '.$this->file.'.';
+            return $message;
 	}
 }
