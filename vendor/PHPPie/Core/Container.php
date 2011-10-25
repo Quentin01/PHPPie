@@ -16,22 +16,10 @@ class Container {
     
     public function __construct(KernelInterface $kernel, \PHPPie\Autoload\Autoloader $autoloader)
     {
-        $this->services['kernel'] = array(
-            'class' => 'PHPPie\Core\Kernel',
-            'shared' => true,
-            'arguments' => array(),
-            'hasGetParameters' => false,
-        );
-        
+        $this->addService('kernel', 'PHPPie\Core\Kernel', true, array());
         $this->registerServices['kernel'] = $kernel;
         
-        $this->services['autoloader'] = array(
-            'class' => 'PHPPie\Autoload\Autoloader',
-            'shared' => true,
-            'arguments' => array(),
-            'hasGetParameters' => false,
-        );
-        
+        $this->addService('autoloader', 'PHPPie\Autoload\Autoloader', true, array());
         $this->registerServices['autoloader'] = $autoloader;
         
         $this->servicesFile = new \PHPPie\File\XML($kernel->getPathConfig().DIRECTORY_SEPARATOR.'services.xml');

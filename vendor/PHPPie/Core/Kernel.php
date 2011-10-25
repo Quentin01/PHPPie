@@ -11,6 +11,8 @@ class Kernel implements KernelInterface {
     protected $debug;
     protected $dirFrontController;
     
+    public $container;
+    
     public function __construct($dirFrontController, $debug = false, \PHPPie\Autoload\Autoloader $autoloader)
     {
         $this->debug = $debug;
