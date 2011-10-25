@@ -22,7 +22,12 @@ class Container {
         $this->addService('autoloader', 'PHPPie\Autoload\Autoloader', true, array());
         $this->registerServices['autoloader'] = $autoloader;
         
-        $this->servicesFile = new \PHPPie\File\XML($kernel->getPathConfig().DIRECTORY_SEPARATOR.'services.xml');
+        $this->parseFile();
+    }
+    
+    protected function parseFile()
+    {
+        $this->servicesFile = new \PHPPie\File\XML($this->getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'services.xml');
         $xml = $this->servicesFile->readData();
         
         $parameters = $xml->parameters;
