@@ -5,6 +5,8 @@
     </parameters>
     
     <services>
-        
+        <service id="cache" class="%cache%">
+            <argument>%kernel.pathCache%</argument>
+        </service>
     </services>
 </container>

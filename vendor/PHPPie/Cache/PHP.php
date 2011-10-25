@@ -5,15 +5,16 @@
  * Created on 24/10/11 at 13:45
  */
 
-namespace PHPPie\File;
+namespace PHPPie\Cache;
 
 class PHP{
 
-	private $cachePath = 'path/to/cache';
+	protected $cachePath;
 
-	public function __construct()
+	public function __construct($cachePath)
 	{
-		
+		$this->cachePath = $cachePath;
+                echo $this->cachePath;
 	}
 
 	public function add($id, $data)

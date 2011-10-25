@@ -52,8 +52,10 @@ class Autoloader {
 
     public function loadClass($class) {
         if ($file = $this->findFile($class)) {
-            require $file;
+            require_once $file;
+            return true;
         }
+        return false;
     }
 
     public function findFile($class) {

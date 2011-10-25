@@ -19,6 +19,6 @@ $autoloader->registerNamespaceFallbacks(array(
 
 $autoloader->register();
 
-$kernel = new PHPPie\Core\Kernel(__DIR__, true);
+$kernel = new PHPPie\Core\Kernel(__DIR__, true, $autoloader);
 $kernel->run();
 ?>

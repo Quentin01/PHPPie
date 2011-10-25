@@ -11,12 +11,12 @@ class Kernel implements KernelInterface {
     protected $debug;
     protected $dirFrontController;
     
-    public function __construct($dirFrontController, $debug = false)
+    public function __construct($dirFrontController, $debug = false, \PHPPie\Autoload\Autoloader $autoloader)
     {
         $this->debug = $debug;
         $this->dirFrontController = realpath($dirFrontController);
         
-        $this->container = new Container($this);
+        $this->container = new Container($this, $autoloader);
     }
     
     public function run()
@@ -72,6 +72,23 @@ class Kernel implements KernelInterface {
     public function getPathJs()
     {
         return $this->getPathWeb().DIRECTORY_SEPARATOR.'js';
+    }
+    
+    public function getContainerParameters()
+    {
+        return array(
+            'pathApp' => $this->getPathApp(),
+            'pathWeb' => $this->getPathWeb(),
+            'pathCache' => $this->getPathCache(),
+            'pathConfig' => $this->getPathConfig(),
+            'pathControllers' => $this->getPathControllers(),
+            'pathModels' => $this->getPathModels(),
+            'pathViews' => $this->getPathViews(),
+            'pathCss' => $this->getPathCss(),
+            'pathImages' => $this->getPathImages(),
+            'pathJs' => $this->getPathJs(),
+            'pathRoot' => $this->dirFrontController,
+        );
     }
 }
 ?>
