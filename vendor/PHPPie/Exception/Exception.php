@@ -32,7 +32,7 @@ class Exception extends \Exception{
 	 */ 
 	public function __toString()
 	{
-            $message = 'Error : '.$this->message;
+            $message = 'Error : "'.$this->message.'"';
             
             if(!is_null($this->class))
             {
