@@ -15,10 +15,11 @@ $string = <<<XML
 </a>
 XML;
 
-$xml = new SimpleXMLElement($string);
+$xml = new SimpleXMLElement($string);}
+
 //print_r($xml);
 
-$file = XMLFile::create(__DIR__.'/fichier.xml');
+$file = XMLFile::create(__DIR__.'/fichier.php');
 
 $file->writeData($xml);
 print_r($file->readData());
