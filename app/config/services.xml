@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container>
+    <parameters>
+        <parameter key="cache">PHPPie\Cache\PHP</parameter>
+    </parameters>
+    
+    <services>
+        
+    </services>
+</container>
