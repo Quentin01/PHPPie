@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Class PHP cache manager
+ * Class Exception
  * Created on 25/10/11 at 11:12
  */
 
