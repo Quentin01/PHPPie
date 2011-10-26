@@ -11,8 +11,9 @@ class Route {
     protected $pattern;
     protected $defaults;
     protected $requirements;
-    protected $tokens = array();
     
+    protected $patternRegexp;
+    protected $tokens = array();
     protected $defaultURI = null;
     
     public function __construct($pattern, array $defaults, array $requirements = array())
