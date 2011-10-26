@@ -11,8 +11,6 @@ class Router {
     protected $kernel;
     protected $routes = array();
     
-    protected $lastURI = null;
-    
     public function __construct(\PHPPie\Core\KernelInterface $kernel)
     {
         $this->kernel = $kernel;
@@ -37,8 +35,6 @@ class Router {
     
     public function resolve($uri)
     {
-        $this->lastURI = $uri;
-        
         foreach($this->routes as $name => $route)
         {
             if($route->check($uri))

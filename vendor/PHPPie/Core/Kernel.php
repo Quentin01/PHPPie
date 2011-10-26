@@ -26,6 +26,10 @@ class Kernel implements KernelInterface {
         //$request = $this->container->getService('http.request');
         $router = $this->container->getService('router');
         //$route = $router->resolve($request->getURI());
+        //
+        //if($route === false)
+        //  throw new \PHPPie\Exception\Exception('Route not found', 'PHPPie\Core\Kernel', 'run');
+        //
         //$parameters = $route->getParameters();
         //$parameters['controller'] = explode(':', $parameters['controller']);
         //$controller = $parameters['controller'][0];
