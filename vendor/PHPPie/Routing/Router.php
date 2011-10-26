@@ -22,14 +22,17 @@ class Router {
         $file = new \PHPPie\File\Yaml($this->kernel->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml');
         $routesData = $file->readData();
         
-        foreach($routesData as $name => $data)
+        if(is_array($routesData))
         {
-            if(!isset($data['requirements']))
+            foreach($routesData as $name => $data)
             {
-                $data['requirements'] = array();
+                if(!isset($data['requirements']))
+                {
+                    $data['requirements'] = array();
+                }
+
+                $this->routes[$name] = new Route($data['pattern'], $data['defaults'], $data['requirements']);
             }
-            
-            $this->routes[$name] = new Route($data['pattern'], $data['defaults'], $data['requirements']);
         }
     }
     
