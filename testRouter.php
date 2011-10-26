@@ -5,7 +5,7 @@ $router = $kernel->container->getService('router');
 $uri = '/blog/45';
 if(false !== $route = $router->resolve($uri))
 {
-    echo 'Route trouvé : '.serialize($route->getParameters($uri));
+    echo 'Route trouvé, paramètres : '.print_r($route->getParameters());
 }
 else
 {
