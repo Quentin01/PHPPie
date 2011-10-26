@@ -2,11 +2,16 @@
 <container>
     <parameters>
         <parameter key="cache.class">PHPPie\Cache\PHP</parameter>
+        <parameter key="router.class">PHPPie\Routing\Router</parameter>
     </parameters>
     
     <services>
         <service id="cache" class="%cache.class%">
             <argument>%kernel.pathCache%</argument>
+        </service>
+        
+        <service id="router" class="%router.class%">
+            <argument>@kernel</argument>
         </service>
     </services>
 </container>

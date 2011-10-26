@@ -23,7 +23,16 @@ class Kernel implements KernelInterface {
     
     public function run()
     {
+        //$request = $this->container->getService('http.request');
+        $router = $this->container->getService('router');
+        //$route = $router->resolve($request->getURI());
+        //$parameters = $route->getParameters();
+        //$parameters['controller'] = explode(':', $parameters['controller']);
+        //$controller = $parameters['controller'][0];
+        //$action = $parameters['controller'][1];
+        //unset($parameters['controller']);
         
+        //$request->addGet($parameters);
     }
     
     public function getPathApp()
