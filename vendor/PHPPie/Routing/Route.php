@@ -47,6 +47,7 @@ class Route {
                     $pattern = str_replace(preg_quote($match[1][0]).'\\{'.$match[3][0].'\\}', '('.preg_quote($match[1][0]).'(?P<'.$match[3][0].'>'.$requirement.'))?', $pattern);
             }
         }
+        
         return $pattern;
     }
     
@@ -70,8 +71,6 @@ class Route {
         if($result === false)
             throw new \PHPPie\Exception\Exception('The URI '.$uri.' not are parameters with this route.', 'PHPPie\Routing\Route', 'getParameters');
         
-        $i = 1;
-        
         foreach($this->tokens as $token)
         {
             if(isset($matches[$token]))
@@ -85,8 +84,6 @@ class Route {
             {
                 $parameters[$token] = $this->defaults[$token];
             }
-                
-            $i++;
         }
         
         foreach($this->defaults as $name => $defaut)
