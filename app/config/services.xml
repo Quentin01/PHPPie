@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container>
     <parameters>
-        <parameter key="cache">PHPPie\Cache\PHP</parameter>
+        <parameter key="cache.class">PHPPie\Cache\PHP</parameter>
     </parameters>
     
     <services>
-        <service id="cache" class="%cache%">
+        <service id="cache" class="%cache.class%">
             <argument>%kernel.pathCache%</argument>
         </service>
     </services>
