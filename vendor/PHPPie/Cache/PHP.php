@@ -37,7 +37,7 @@ class PHP{
 		}
 		else
 		{
-			throw new \Exception('Cache '.$id.' doesn\'t exists');
+			throw new \PHPPie\Exception\Exception('Cache '.$id.' doesn\'t exists', 'PHPPie\Cache\PHP', 'del');
 		}
 	}
 
@@ -94,7 +94,7 @@ class PHP{
 		}
 		else
 		{
-			throw new \Exception('Cache '.$id.' doesn\'t exists');
+			throw new \PHPPie\Exception\Exception('Cache '.$id.' doesn\'t exists', 'PHPPie\Cache\PHP', 'get');
 		}
 	}
 }

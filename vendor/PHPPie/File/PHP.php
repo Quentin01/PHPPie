@@ -14,19 +14,13 @@ class PHP extends File {
         
         if($this->getExtension() != 'php' || $this->getExtension() != 'php5')
         {
-            throw new \Exception('File '.$this->pathFile.' isn\'t a PHP\' file');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a PHP file', 'PHPPie\File\PHP', '__construct');
         }
     }
     
     public static function create($pathFile)
     {
         $file = parent::create($pathFile);
-        
-        if($file->getExtension() != 'php' || $file->getExtension() != 'php5')
-        {
-            $file->del();
-            throw new \Exception('File '.$file->pathFile.' isn\'t a PHP\' file');
-        }
         
         return $file;
     }

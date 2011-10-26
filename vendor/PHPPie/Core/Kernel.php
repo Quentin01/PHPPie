@@ -13,7 +13,7 @@ class Kernel implements KernelInterface {
     
     public $container;
     
-    public function __construct($dirFrontController, $debug = false, \PHPPie\Autoload\Autoloader $autoloader)
+    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, $debug = false)
     {
         $this->debug = $debug;
         $this->dirFrontController = realpath($dirFrontController);

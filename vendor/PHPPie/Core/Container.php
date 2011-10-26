@@ -101,17 +101,17 @@ class Container {
                         }
                         else
                         {
-                            throw new \Exception('Parameter '.$key.' doesn\'t exists');
+                            throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
                         }
                     }
                     else 
                     {
-                        throw new \Exception('Parameter '.$key.' doesn\'t exists');
+                        throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
                     }
                 }
                 else
                 {
-                    throw new \Exception('Parameter '.$key.' doesn\'t exists');
+                    throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
                 }
             }
         }
@@ -122,7 +122,7 @@ class Container {
             if($this->hasService($key))
                 return $this->getService($key);
             else
-                throw new \Exception('Service '.$key.' doesn\'t exists');
+                throw new \PHPPie\Exception\Exception('Service '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
         }
     }
     
@@ -164,7 +164,7 @@ class Container {
         }
         else 
         {
-            throw new \Exception('Service '.$id.' doesn\'t exists');
+            throw new \PHPPie\Exception\Exception('Service '.$id.' doesn\'t exists', 'PHPPie\Core\Container', 'getService');
         }
     }
     
@@ -191,7 +191,7 @@ class Container {
         }
         
         if(!$this->getService('autoloader')->loadClass($service['class']))
-            throw new \Exception('Class '.$service['class'].' doesn\'t exists');
+            throw new \PHPPie\Exception\Exception('Class '.$service['class'].' doesn\'t exists', 'PHPPie\Core\Container', 'constructService');
         
         $reflectionClass = new \ReflectionClass($service['class']);
         return $reflectionClass->newInstanceArgs($service['arguments']);

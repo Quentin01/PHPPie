@@ -14,19 +14,13 @@ class Json extends File {
         
         if($this->getExtension() != 'json')
         {
-            throw new \Exception('File '.$this->pathFile.' isn\'t a JSON\' file');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a JSON file', 'PHPPie\File\Json', '__construct');
         }
     }
     
     public static function create($pathFile)
     {
         $file = parent::create($pathFile);
-        
-        if($file->getExtension() != 'json')
-        {
-            $file->del();
-            throw new \Exception('File '.$file->pathFile.' isn\'t a JSON\' file');
-        }
         
         return $file;
     }

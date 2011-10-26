@@ -14,19 +14,13 @@ class XML extends File {
         
         if($this->getExtension() != 'xml')
         {
-            throw new \Exception('File '.$this->pathFile.' isn\'t a XML\' file');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a XML file', 'PHPPie\File\XML', '__construct');
         }
     }
     
     public static function create($pathFile)
     {
         $file = parent::create($pathFile);
-        
-        if($file->getExtension() != 'xml')
-        {
-            $file->del();
-            throw new \Exception('File '.$file->pathFile.' isn\'t a XML\' file');
-        }
         
         return $file;
     }
@@ -52,11 +46,11 @@ class XML extends File {
             if(get_class($data) === "SimpleXMLElement")
                 return $this->setContents($data->asXML());
             else
-                throw new \Exception('Data isn\'t a SimpleXMLElement object');
+                throw new \PHPPie\Exception\Exception('Data isn\'t a SimpleXMLElement object', 'PHPPie\File\XML', 'writeData');
         }
         else
         {
-            throw new \Exception('Data isn\'t a object');
+            throw new \PHPPie\Exception\Exception('Data isn\'t a object', 'PHPPie\File\XML', 'writeData');
         }
     }
 }

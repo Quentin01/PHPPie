@@ -16,19 +16,13 @@ class Yaml extends File {
         
         if($this->getExtension() != 'yml')
         {
-            throw new \Exception('File '.$this->pathFile.' isn\'t a Yaml\' file');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a Yaml file', 'PHPPie\File\Yaml', '__construct');
         }
     }
     
     public static function create($pathFile)
     {
         $file = parent::create($pathFile);
-        
-        if($file->getExtension() != 'yml')
-        {
-            $file->del();
-            throw new \Exception('File '.$file->pathFile.' isn\'t a Yaml\' file');
-        }
         
         return $file;
     }
