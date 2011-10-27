@@ -29,7 +29,7 @@ class Route {
     {
         $tokens = array();
         $pattern = preg_quote($this->pattern);
-        preg_match_all('#(-|\/|\.)(\{([a-zA-Z]+)\})#', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+        preg_match_all('#(.?)(\{([a-zA-Z]+)\})#', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
         
         foreach($matches as $match)
         {     
