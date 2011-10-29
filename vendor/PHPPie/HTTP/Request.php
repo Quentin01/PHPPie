@@ -14,9 +14,8 @@ namespace PHPPie\HTTP;
  	protected $file = array();
  	protected $server = array();
 
- 	public function __construct(\PHPPie\Core\KernelInterface $kernel)
- 	{
-		$this->uri = $this->getRequestUri();	
+ 	public function __construct(/*\PHPPie\Core\KernelInterface $kernel*/)
+ 	{	
 		$this->post = $_POST;
 		$this->file = $_FILES;	
 		$this->server = $_SERVER;
@@ -143,7 +142,7 @@ namespace PHPPie\HTTP;
  		{
  			if (isset($this->file["$index"]))
  			{
- 				return $this->file["$index"]
+ 				return $this->file["$index"];
  			}
 
  			else
@@ -174,7 +173,7 @@ namespace PHPPie\HTTP;
  	 */
  	public function getHttpReferer()
  	{
- 		return $_SERVER['HTTP_REFERER'];
+ 		return $this->server['HTTP_REFERER'];
  	}
 
  	/**
@@ -183,7 +182,7 @@ namespace PHPPie\HTTP;
  	 */
  	public function getRequestUri()
  	{
- 		return $_SERVER['REQUEST_URI'];
+ 		return $this->server['REQUEST_URI'];
  	}
 
  	/**
@@ -192,7 +191,7 @@ namespace PHPPie\HTTP;
  	 */
 	public function isAjaxRequest()
  	{
- 		if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+ 		if (array_key_exists('HTTP_X_REQUESTED_WITH', $this->server) && strtolower($this->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
  		{
  	 		return true;
  	 	}
@@ -201,5 +200,50 @@ namespace PHPPie\HTTP;
  		{
  	 		return false;
  		}
+ 	}
+
+ 	/**
+ 	 * Retourne le port utilisé par le navigateur
+ 	 * @return string port utilisé
+ 	 */
+ 	public function getPort()
+ 	{
+ 		return $this->server['REMOTE_PORT'];
+ 	}
+
+ 	/**
+ 	 * Retourne l'hôte
+ 	 * @return string hôte HTTP
+ 	 */
+	public function getHost()
+ 	{
+  		return $this->server['HTTP_HOST'];
+ 	}
+
+ 	/**
+ 	 * Retourne le protocol HTTP utilisé
+ 	 * @return string le protocol HTTP
+ 	 */
+ 	public function getProtocol()
+ 	{
+ 		return $this->server['SERVER_PROTOCOL'];
+ 	}
+
+ 	/**
+ 	 * Retourne l'user agent de l'utilisateur
+ 	 * @return string user agent
+ 	 */
+ 	public function getUserAgent()
+ 	{
+ 		return $this->server['HTTP_USER_AGENT'];
+ 	}
+
+ 	/**
+ 	 * Retourne l'adresse IP demandée
+ 	 * @return string adresse IP
+ 	 */
+ 	public function getIp()
+ 	{
+ 		return $this->server['REMOTE_ADDR'];
  	}
  }
