@@ -22,14 +22,17 @@ namespace PHPPie\HTTP;
 		$this->file = $_FILES;	
  	}
 
+ 	/**
+ 	 * Retourne l'URI demandée par le navigateur
+ 	 * @return $string L'URI demandée
+ 	 */
  	public function getUri()
  	{
  		return $this->uri;
  	}
 
- 	/***********************/
  	/**
- 	 * Méthode qui ajoute des données POST dans l'array.
+ 	 * Ajoute des données POST dans l'array.
  	 * @param array $posts Tableau des données à ajouter
  	 * @return bool True si ça marche false sinon
  	 */
@@ -49,17 +52,34 @@ namespace PHPPie\HTTP;
  	}
 
  	/**
- 	 * Méthode qui retourne la listes des POSTs.
- 	 * @return array Tableau de données
+ 	 * Retourne la listes des POSTs.
+ 	 * @param string $index l'index de la variable POST que l'on veut
+ 	 * @return array Tableau de données ou POST avec l'index demandé
  	 */
- 	public function getPost()
+ 	public function getPost($index = null)
  	{
- 		return $this->post;
+ 		if (!empty($index))
+ 		{
+ 			if (isset($this->post["$index"]))
+ 			{
+ 				return $this->post["$index"];
+ 			}
+
+ 			else
+ 			{
+ 				throw new \PHPPie\Exception\Exception('The requested index doesn\'t exist.', 'PHPPie\HTTP\Request', 'getPost');
+ 			}
+ 		}
+
+ 		else
+ 		{
+ 			return $this->post;
+ 		}
  	}
 
  	/***********************/
  	/**
- 	 * Méthode qui ajoute des paramètres GET dans l'array.
+ 	 * Ajoute des paramètres GET dans l'array.
  	 * @param array $gets Tableau des données à ajouter
  	 * @return bool True si ça marche false sinon
  	 */
@@ -79,9 +99,9 @@ namespace PHPPie\HTTP;
  	}
 
  	/**
- 	 * Méthode qui retourne la listes des GETs.
- 	 * @param string index
- 	 * @return array Tableau de données
+ 	 * Méthode qui retourne la liste des GETs ou un en particulier.
+ 	 * @param string $index l'index de la variable GET que l'on cherche
+ 	 * @return array Tableau de GET ou celui avec l'index que l'on veut
  	 */
  	public function getGet($index = null)
  	{
@@ -104,15 +124,14 @@ namespace PHPPie\HTTP;
  		}
  	}
 
- 	/***********************/
  	/**
- 	 * Méthode qui ajoute des variables FILES dans l'array.
+ 	 * Ajoute des variables FILES dans l'array.
  	 * @param array $files Tableau des données à ajouter
  	 * @return bool True si ça marche false sinon
  	 */
  	public function addFile($files)
  	{
- 		if (is_array($gets))
+ 		if (is_array($files))
  		{
 	 		$this->file = array_merge($this->file, $files);
 	 		return true;
@@ -126,7 +145,9 @@ namespace PHPPie\HTTP;
  	}
 
  	/**
- 	 * Méthode qui renvoit un tableau de file
+ 	 * Retourne un tableau de file
+ 	 * @param string $index l'index de la valeur qu'on veut
+ 	 * @return tableau de FILES ou un en particulier
  	 */
  	public function getFile($index = null)
  	{
@@ -152,6 +173,7 @@ namespace PHPPie\HTTP;
  	/***********************/
  	/**
  	 * Méthode qui renvoit un tableau SERVER
+ 	 * @return array tableau de $_SERVER
  	 */ 
 	public function getServer()
  	{
@@ -160,6 +182,7 @@ namespace PHPPie\HTTP;
 
  	/**
  	 * Méthode qui renvoit l'URL de la page précédente
+ 	 * @return string l'URL de la page précédente
  	 */
  	public function getHttpReferer()
  	{
@@ -168,6 +191,7 @@ namespace PHPPie\HTTP;
 
  	/**
  	 * Méthode qui renvoit l'URI demandée par le navigateur
+ 	 * @return l'URI de la page demandée
  	 */
  	public function getRequestUri()
  	{
