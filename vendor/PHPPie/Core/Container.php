@@ -59,11 +59,15 @@ class Container {
     
     public function addParameter($key, $value)
     {
+        $key = trim($key);
+        $value = trim($value);
+        
         $this->parameters[$key] = $value;
     }
     
     public function hasParameter($key)
     {
+        $key = trim($key);
         return isset($this->parameters[$key]);
     }
     
@@ -76,6 +80,7 @@ class Container {
         
         if($key[0] !== "@")
         {
+            $key = trim($key);
             if($this->hasParameter($key))
             {
                 return $this->parameters[$key];
@@ -117,7 +122,7 @@ class Container {
         }
         else
         {
-            $key = substr($key, 1);
+            $key = trim(substr($key, 1));
             
             if($this->hasService($key))
                 return $this->getService($key);
@@ -128,7 +133,7 @@ class Container {
     
     public function addService($id, $class, $shared, $arguments = array())
     {
-        $this->services[$id] = array(
+        $this->services[trim($id)] = array(
             'class' => $class,
             'shared' => $shared,
             'arguments' => $arguments,
@@ -138,16 +143,19 @@ class Container {
     
     public function hasService($id)
     {
+        $id = trim($id);
         return isset($this->services[$id]);
     }
     
     protected function hasRegisterService($id)
     {
+        $id = trim($id);
         return isset($this->registerServices[$id]);
     }
     
     public function getService($id)
     {
+        $id = trim($id);
         if($this->hasService($id))
         {
             if($this->services[$id]['shared'])
@@ -170,6 +178,7 @@ class Container {
     
     protected function constructService($id)
     {
+        $id = trim($id);
         $service = $this->services[$id];
         
         if($service['class'][0] === "%")
@@ -199,6 +208,7 @@ class Container {
     
     protected function registerService($id)
     {
+        $id = trim($id);
         $this->registerServices[$id] = $this->constructService($id);
     }
 }
