@@ -17,7 +17,9 @@ namespace PHPPie\HTTP;
 
  	public function __construct(\PHPPie\Core\KernelInterface $kernel)
  	{
-		$this->uri = getRequestUri();		
+		$this->uri = getRequestUri();	
+		$this->post = $_POST;
+		$this->file = $_FILES;	
  	}
 
  	public function getUri()
@@ -78,11 +80,28 @@ namespace PHPPie\HTTP;
 
  	/**
  	 * Méthode qui retourne la listes des GETs.
+ 	 * @param string index
  	 * @return array Tableau de données
  	 */
- 	public function getGet()
+ 	public function getGet($index = null)
  	{
- 		return $this->get;
+ 		if (!empty($index))
+ 		{
+ 			if (isset($this->get["$index"]))
+ 			{
+ 				return $this->get["$index"];
+ 			}
+
+ 			else
+ 			{
+ 				throw new \PHPPie\Exception\Exception('The requested index doesn\'t exist.', 'PHPPie\HTTP\Request', 'getGet');
+ 			}
+ 		}
+
+ 		else
+ 		{
+ 			return $this->get;
+ 		}
  	}
 
  	/***********************/
@@ -107,11 +126,27 @@ namespace PHPPie\HTTP;
  	}
 
  	/**
- 	 * Méthode qio renvoit un tableau de file
+ 	 * Méthode qui renvoit un tableau de file
  	 */
- 	public function getFiles()
+ 	public function getFile($index = null)
  	{
- 		return $this->file;
+ 		if (!empty($index))
+ 		{
+ 			if (isset($this->file["$index"]))
+ 			{
+ 				return $this->file["$index"]
+ 			}
+
+ 			else
+ 			{
+ 				throw new \PHPPie\Exception\Exception('The requested index doesn\'t exist.', 'PHPPie\HTTP\Request', 'getFile');
+ 			}
+ 		}
+
+ 		else
+ 		{
+ 			return $this->file;
+ 		}
  	}
 
  	/***********************/
