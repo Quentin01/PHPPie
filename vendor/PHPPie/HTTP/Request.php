@@ -9,26 +9,17 @@ namespace PHPPie\HTTP;
 
  class Request{
  	
- 	private $uri;
- 	private $get = array();
- 	private $post = array();
- 	private $file = array();
- 	private $server = $_SERVER;
+ 	protected $get = array();
+ 	protected $post = array();
+ 	protected $file = array();
+ 	protected $server = array();
 
  	public function __construct(\PHPPie\Core\KernelInterface $kernel)
  	{
-		$this->uri = getRequestUri();	
+		$this->uri = $this->getRequestUri();	
 		$this->post = $_POST;
 		$this->file = $_FILES;	
- 	}
-
- 	/**
- 	 * Retourne l'URI demandée par le navigateur
- 	 * @return $string L'URI demandée
- 	 */
- 	public function getUri()
- 	{
- 		return $this->uri;
+		$this->server = $_SERVER;
  	}
 
  	/**
@@ -47,7 +38,6 @@ namespace PHPPie\HTTP;
  		else
  		{
  			throw new \PHPPie\Exception\Exception('The argument is not an array.', 'PHPPie\HTTP\Request', 'addPost');
- 			return false;
  		}
  	}
 
@@ -58,7 +48,7 @@ namespace PHPPie\HTTP;
  	 */
  	public function getPost($index = null)
  	{
- 		if (!empty($index))
+ 		if (!is_null($index))
  		{
  			if (isset($this->post["$index"]))
  			{
@@ -94,7 +84,6 @@ namespace PHPPie\HTTP;
  		else
  		{
  			throw new \PHPPie\Exception\Exception('The argument is not an array.', 'PHPPie\HTTP\Request', 'addGet');
- 			return false;
  		}
  	}
 
@@ -105,7 +94,7 @@ namespace PHPPie\HTTP;
  	 */
  	public function getGet($index = null)
  	{
- 		if (!empty($index))
+ 		if (!is_null($index))
  		{
  			if (isset($this->get["$index"]))
  			{
@@ -140,7 +129,6 @@ namespace PHPPie\HTTP;
  		else
  		{
  			throw new \PHPPie\Exception\Exception('The argument is not an array.', 'PHPPie\HTTP\Request', 'addFile');
- 			return false;
  		}
  	}
 
@@ -151,7 +139,7 @@ namespace PHPPie\HTTP;
  	 */
  	public function getFile($index = null)
  	{
- 		if (!empty($index))
+ 		if (!is_null($index))
  		{
  			if (isset($this->file["$index"]))
  			{
@@ -202,17 +190,16 @@ namespace PHPPie\HTTP;
  	 * Retourne si une requête est une requêta ajax ou non
  	 * @return bool True si c'est une requête Ajax false sinon
  	 */
-
- 	 public function isAjaxRequest()
- 	 {
- 	 	if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
- 	 	{
+	public function isAjaxRequest()
+ 	{
+ 		if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+ 		{
  	 		return true;
  	 	}
 
  	 	else
- 	 	{
+ 		{
  	 		return false;
- 	 	}
- 	 }
+ 		}
+ 	}
  }
