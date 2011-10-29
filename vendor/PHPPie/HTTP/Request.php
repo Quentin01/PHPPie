@@ -197,4 +197,22 @@ namespace PHPPie\HTTP;
  	{
  		return $_SERVER['REQUEST_URI'];
  	}
+
+ 	/**
+ 	 * Retourne si une requête est une requêta ajax ou non
+ 	 * @return bool True si c'est une requête Ajax false sinon
+ 	 */
+
+ 	 public function isAjaxRequest()
+ 	 {
+ 	 	if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+ 	 	{
+ 	 		return true;
+ 	 	}
+
+ 	 	else
+ 	 	{
+ 	 		return false;
+ 	 	}
+ 	 }
  }
