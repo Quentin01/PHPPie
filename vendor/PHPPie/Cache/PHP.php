@@ -6,27 +6,27 @@
  */
 
 namespace PHPPie\Cache;
+use \PHPPie\File\PHP as PHPFile;
 
-class PHP{
+class PHP implements CacheInterface{
 
 	protected $cachePath;
 
 	public function __construct($cachePath)
 	{
 		$this->cachePath = $cachePath;
-                echo $this->cachePath;
 	}
 
 	public function add($id, $data)
 	{
-		$cache = create::PHPFile($this->getPath($id));
+		$cache = PHPFile::create($this->getPath($id));
 		$cache->writeData($data);
 	}
         
-        public function getPath($id)
-        {
-            return $this->cachePath.DIRECTORY_SEPARATOR.md5($id);
-        }
+    public function getPath($id)
+    {
+        return $this->cachePath.DIRECTORY_SEPARATOR.$id.'.php';
+    }
 
 	public function del($id)
 	{
@@ -54,20 +54,20 @@ class PHP{
 			
 			if ($timeLastUpdateCache < $timeLastUpdateData)
 			{
-                            return false;
+                return false;
 			}
-                        elseif($maxTime != 0 && time() > ($timeLastUpdateCache + $maxTime))
-                        {
-                            return false;
-                        }
+            elseif($maxTime != 0 && time() > ($timeLastUpdateCache + $maxTime))
+            {
+				return false;
+            }
 			else
 			{
-                            return True;
+                return True;
 			}
 		}
 		else
 		{
-                    return false;
+			return false;
 		}
 	}
 	

@@ -19,6 +19,11 @@ $autoloader->registerNamespaceFallbacks(array(
 
 $autoloader->register();
 
-$kernel = new PHPPie\Core\Kernel(__DIR__, $autoloader, true);
+$cacheManager = new PHPPie\Cache\PHP(__DIR__.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache');
+$autoloader->enableCache($cacheManager);
+
+$kernel = new PHPPie\Core\Kernel(__DIR__, $autoloader, $cacheManager, true);
 $kernel->run();
+
+$autoloader->save();
 ?>

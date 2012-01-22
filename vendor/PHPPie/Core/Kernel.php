@@ -12,31 +12,49 @@ class Kernel implements KernelInterface {
     protected $dirFrontController;
     
     public $container;
+    public $autoloader;
     
-    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, $debug = false)
+    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
         $this->debug = $debug;
         $this->dirFrontController = realpath($dirFrontController);
-        
-        $this->container = new Container($this, $autoloader);
+
+		$this->autoloader = $autoloader;
+        $this->container = new Container($this, $this->autoloader, $cacheManager);
     }
     
     public function run()
     {
-        //$request = $this->container->getService('http.request');
+        $request = $this->container->getService('http.request');
         $router = $this->container->getService('router');
-        //$route = $router->resolve($request->getURI());
-        //
-        //if($route === false)
-        //  throw new \PHPPie\Exception\Exception('Route not found', 'PHPPie\Core\Kernel', 'run');
-        //
-        //$parameters = $route->getParameters();
-        //$parameters['controller'] = explode(':', $parameters['controller']);
-        //$controller = $parameters['controller'][0];
-        //$action = $parameters['controller'][1];
-        //unset($parameters['controller']);
+        $route = $router->resolve($request->getURI());
         
-        //$request->addGet($parameters);
+        if($route === false)
+			throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run');
+		
+        $parameters = $route->getParameters();
+                
+        if(!isset($parameters['_controller']))
+			throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run');
+        
+        if(isset($parameters['_action']))
+		{
+			$controller = $parameters['_controller'];
+			$action = $parameters['_action'];
+			
+			unset($parameters['_controller']);
+			unset($parameters['_action']);
+		}
+		else
+		{
+			$parameters['_controller'] = explode(':', $parameters['_controller']);
+			$controller = $parameters['_controller'][0];
+			$action = (isset($parameters['_controller'][1])) ? $parameters['_controller'][1] : null;
+			
+			unset($parameters['_controller']);
+		}
+        
+        $request->addGet($parameters);
     }
     
     public function getPathApp()

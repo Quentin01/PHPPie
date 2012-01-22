@@ -7,7 +7,7 @@
 
 namespace PHPPie\HTTP;
 
- class Request{
+class Request {
  	
  	protected $get = array();
  	protected $post = array();
@@ -33,7 +33,6 @@ namespace PHPPie\HTTP;
 	 		$this->post = array_merge($this->post, $posts);
 	 		return true;
  		}
-
  		else
  		{
  			throw new \PHPPie\Exception\Exception('The argument is not an array.', 'PHPPie\HTTP\Request', 'addPost');
@@ -49,17 +48,15 @@ namespace PHPPie\HTTP;
  	{
  		if (!is_null($index))
  		{
- 			if (isset($this->post["$index"]))
+ 			if (isset($this->post[$index]))
  			{
- 				return $this->post["$index"];
+ 				return $this->post[$index];
  			}
-
  			else
  			{
- 				throw new \PHPPie\Exception\Exception('The requested index doesn\'t exist.', 'PHPPie\HTTP\Request', 'getPost');
+ 				throw new \PHPPie\Exception\Exception('The requested index for POST "'.$index.'" doesn\'t exist.', 'PHPPie\HTTP\Request', 'getPost');
  			}
  		}
-
  		else
  		{
  			return $this->post;
@@ -79,7 +76,6 @@ namespace PHPPie\HTTP;
 	 		$this->get = array_merge($this->get, $gets);
 	 		return true;
  		}
-
  		else
  		{
  			throw new \PHPPie\Exception\Exception('The argument is not an array.', 'PHPPie\HTTP\Request', 'addGet');
@@ -95,14 +91,14 @@ namespace PHPPie\HTTP;
  	{
  		if (!is_null($index))
  		{
- 			if (isset($this->get["$index"]))
+ 			if (isset($this->get[$index]))
  			{
- 				return $this->get["$index"];
+ 				return $this->get[$index];
  			}
 
  			else
  			{
- 				throw new \PHPPie\Exception\Exception('The requested index doesn\'t exist.', 'PHPPie\HTTP\Request', 'getGet');
+ 				throw new \PHPPie\Exception\Exception('The requested index for GET "'.$index.'" doesn\'t exist.', 'PHPPie\HTTP\Request', 'getGet');
  			}
  		}
 
@@ -124,7 +120,6 @@ namespace PHPPie\HTTP;
 	 		$this->file = array_merge($this->file, $files);
 	 		return true;
  		}
-
  		else
  		{
  			throw new \PHPPie\Exception\Exception('The argument is not an array.', 'PHPPie\HTTP\Request', 'addFile');
@@ -140,14 +135,13 @@ namespace PHPPie\HTTP;
  	{
  		if (!is_null($index))
  		{
- 			if (isset($this->file["$index"]))
+ 			if (isset($this->file[$index]))
  			{
- 				return $this->file["$index"];
+ 				return $this->file[$index];
  			}
-
  			else
  			{
- 				throw new \PHPPie\Exception\Exception('The requested index doesn\'t exist.', 'PHPPie\HTTP\Request', 'getFile');
+ 				throw new \PHPPie\Exception\Exception('The requested index for FILE "'.$index.'" doesn\'t exist.', 'PHPPie\HTTP\Request', 'getFile');
  			}
  		}
 
@@ -180,7 +174,7 @@ namespace PHPPie\HTTP;
  	 * Méthode qui renvoit l'URI demandée par le navigateur
  	 * @return l'URI de la page demandée
  	 */
- 	public function getRequestUri()
+ 	public function getURI()
  	{
  		return $this->server['REQUEST_URI'];
  	}
@@ -244,6 +238,8 @@ namespace PHPPie\HTTP;
  	 */
  	public function getIp()
  	{
- 		return $this->server['REMOTE_ADDR'];
+		if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){ return $_SERVER['HTTP_X_FORWARDED_FOR']; }
+		elseif(isset($_SERVER['HTTP_CLIENT_IP'])){ return $_SERVER['HTTP_CLIENT_IP']; }
+ 		else{ return $this->server['REMOTE_ADDR']; }
  	}
  }

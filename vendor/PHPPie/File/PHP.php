@@ -12,7 +12,7 @@ class PHP extends File {
     {
         parent::__construct($pathFile);
         
-        if($this->getExtension() != 'php' || $this->getExtension() != 'php5')
+        if($this->getExtension() != 'php' && $this->getExtension() != 'php5')
         {
             throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a PHP file', 'PHPPie\File\PHP', '__construct');
         }
@@ -33,7 +33,7 @@ class PHP extends File {
     
     public function writeData($data)
     {
-        return $this->setContents("<?php $data = unserialize('".serialize($data)."');");
+        return $this->setContents("<?php \$data = unserialize('".serialize($data)."');");
     }
 }
 

@@ -9,20 +9,34 @@ namespace PHPPie\Core;
 
 class Container { 
     protected $servicesFile;
+    protected $idCache = 'services.cache';
     
     protected $parameters = array();
     protected $services = array();
     protected $registerServices = array();
     
-    public function __construct(KernelInterface $kernel, \PHPPie\Autoload\Autoloader $autoloader)
+    public function __construct(KernelInterface $kernel, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager)
     {
         $this->addService('kernel', 'PHPPie\Core\Kernel', true, array());
         $this->registerServices['kernel'] = $kernel;
         
+        $this->addService('cache', 'PHPPie\Cache', true, array());
+        $this->registerServices['cache'] = $cacheManager;
+        
         $this->addService('autoloader', 'PHPPie\Autoload\Autoloader', true, array());
         $this->registerServices['autoloader'] = $autoloader;
         
-        $this->parseFile();
+        if($cacheManager->isFresh($this->idCache, $this->getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'services.xml'))
+		{
+			$data = $cacheManager->get($this->idCache);
+			
+			$this->parameters = $data['parameters'];
+			$this->services = $data['services'];
+		}
+		else
+		{
+			$this->parseFile();
+		}
     }
     
     protected function parseFile()
@@ -55,6 +69,11 @@ class Container {
                 $this->addService((string) $attributes->id, (string) $attributes->class, (empty($attributes->shared) || $attributes->shared === "true"), $arguments);
             }
         }
+        
+        $this->getService('cache')->add($this->idCache, array(
+			'parameters' => $this->parameters,
+			'services' => $this->services,
+        ));
     }
     
     public function addParameter($key, $value)
@@ -104,20 +123,10 @@ class Container {
 
                             return $this->getParameter($key);
                         }
-                        else
-                        {
-                            throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
-                        }
-                    }
-                    else 
-                    {
-                        throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
                     }
                 }
-                else
-                {
-                    throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
-                }
+                   
+                throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
             }
         }
         else

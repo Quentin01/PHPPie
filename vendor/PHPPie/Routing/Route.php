@@ -8,21 +8,29 @@
 namespace PHPPie\Routing;
 
 class Route {
-    protected $pattern;
-    protected $defaults;
-    protected $requirements;
+    public $pattern;
+    public $defaults;
+    public $requirements;
     
-    protected $patternRegexp;
-    protected $tokens = array();
+    public $patternRegexp;
+    public $tokens = array();
     protected $defaultURI = null;
     
-    public function __construct($pattern, array $defaults, array $requirements = array())
+    public function __construct($pattern, array $defaults, array $requirements = array(), $patternRegexp = null, $tokens = null)
     {
         $this->pattern = $pattern;
         $this->defaults = $defaults;
         $this->requirements = $requirements;
         
-        $this->patternRegexp = $this->createRegexp();
+        if(is_null($patternRegexp) && is_null($tokens))
+        {
+			$this->patternRegexp = $this->createRegexp();
+		}
+		else
+		{
+			$this->patternRegexp = $patternRegexp;
+			$this->tokens = $tokens;
+		}
     }
     
     protected function createRegexp()
@@ -45,7 +53,7 @@ class Route {
                 if($match[0][1] == 0 && @$this->pattern[($match[0][1] + strlen($match[0][0]))] !== '/')
                     $pattern = str_replace(preg_quote($match[1][0]).'\\{'.$match[3][0].'\\}', preg_quote($match[1][0]).'(?P<'.$match[3][0].'>'.$requirement.')?', $pattern);
                 else
-                    $pattern = str_replace(preg_quote($match[1][0]).'\\{'.$match[3][0].'\\}', '('.preg_quote($match[1][0]).'(?P<'.$match[3][0].'>'.$requirement.'))?', $pattern);
+                    $pattern = str_replace(preg_quote($match[1][0]).'\\{'.$match[3][0].'\\}', '('.preg_quote($match[1][0]).'(?P<'.$match[3][0].'>'.$requirement.')?)?', $pattern);
             }
         }
         
@@ -70,7 +78,7 @@ class Route {
         $result = preg_match('#^'.$this->patternRegexp.'$#i', $uri, $matches);
         
         if($result === false)
-            throw new \PHPPie\Exception\Exception('The URI '.$uri.' not are parameters with this route.', 'PHPPie\Routing\Route', 'getParameters');
+            throw new \PHPPie\Exception\Exception('The URI '.$uri.' aren\'t parameters with this route.', 'PHPPie\Routing\Route', 'getParameters');
         
         foreach($this->tokens as $token)
         {

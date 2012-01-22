@@ -13,10 +13,27 @@ class Autoloader {
     protected $prefixFallbacks = array();
     protected $namespaces = array();
     protected $prefixes = array();
+    
+    protected $cache = array();
+    protected $cacheManager = null;
+    protected $idCache = 'autoload.cache';
 
     public function __construct() {
         
     }
+    
+    public function enableCache(\PHPPie\Cache\CacheInterface $cacheManager)
+    {
+		$this->cacheManager = $cacheManager;
+		
+		if($this->cacheManager->exists($this->idCache))
+			$this->cache = array_merge($this->cache, $this->cacheManager->get($this->idCache));
+	}
+	
+	public function save()
+	{
+		$this->cacheManager->add($this->idCache, $this->cache);
+	}
 
     public function register() {
         spl_autoload_register(array($this, 'loadClass'), true, true);
@@ -51,7 +68,14 @@ class Autoloader {
     }
 
     public function loadClass($class) {
+		if(isset($this->cache[$class]))
+		{
+			require_once $this->cache[$class];
+            return true;
+		}
+		
         if ($file = $this->findFile($class)) {
+			$this->cache[$class] = $file;
             require_once $file;
             return true;
         }
