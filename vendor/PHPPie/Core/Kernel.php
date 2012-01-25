@@ -26,8 +26,7 @@ class Kernel implements KernelInterface {
     public function run()
     {
         $request = $this->container->getService('http.request');
-        $router = $this->container->getService('router');
-        $route = $router->resolve($request->getURI());
+        $route = $this->container->getService('router')->resolve($request->getURI());
         
         if($route === false)
 			throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run');
@@ -37,21 +36,11 @@ class Kernel implements KernelInterface {
         if(!isset($parameters['_controller']))
 			throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run');
         
-        if(isset($parameters['_action']))
+		if(!isset($parameters['_action']))
 		{
-			$controller = $parameters['_controller'];
-			$action = $parameters['_action'];
-			
-			unset($parameters['_controller']);
-			unset($parameters['_action']);
-		}
-		else
-		{
-			$parameters['_controller'] = explode(':', $parameters['_controller']);
-			$controller = $parameters['_controller'][0];
-			$action = (isset($parameters['_controller'][1])) ? $parameters['_controller'][1] : null;
-			
-			unset($parameters['_controller']);
+			$data = explode(':', $parameters['_controller']);
+			$parameters['_controller'] = $data[0];
+			$parameters['_action'] = (isset($data[1])) ? $data[1] : null;
 		}
         
         $request->addGet($parameters);

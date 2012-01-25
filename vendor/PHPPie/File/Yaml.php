@@ -22,9 +22,7 @@ class Yaml extends File {
     
     public static function create($pathFile)
     {
-        $file = parent::create($pathFile);
-        
-        return $file;
+        return parent::create($pathFile);
     }
     
     public function readData()

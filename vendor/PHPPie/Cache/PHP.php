@@ -19,8 +19,7 @@ class PHP implements CacheInterface{
 
 	public function add($id, $data)
 	{
-		$cache = PHPFile::create($this->getPath($id));
-		$cache->writeData($data);
+		return PHPFile::create($this->getPath($id))->writeData($data);
 	}
         
     public function getPath($id)
@@ -33,7 +32,7 @@ class PHP implements CacheInterface{
 		if($this->exists($id))
 		{
 			$cache = new PHPFile($this->getPath($id));
-			$cache->del();
+			return $cache->del();
 		}
 		else
 		{
@@ -60,15 +59,11 @@ class PHP implements CacheInterface{
             {
 				return false;
             }
-			else
-			{
-                return True;
-			}
+            
+            return true;
 		}
-		else
-		{
-			return false;
-		}
+		
+		return false;
 	}
 	
 	public function exists($id)

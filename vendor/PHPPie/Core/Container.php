@@ -8,7 +8,6 @@
 namespace PHPPie\Core;
 
 class Container { 
-    protected $servicesFile;
     protected $idCache = 'services.cache';
     
     protected $parameters = array();
@@ -41,8 +40,8 @@ class Container {
     
     protected function parseFile()
     {
-        $this->servicesFile = new \PHPPie\File\XML($this->getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'services.xml');
-        $xml = $this->servicesFile->readData();
+        $servicesFile = new \PHPPie\File\XML($this->getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'services.xml');
+        $xml = $servicesFile->readData();
         
         $parameters = $xml->parameters;
         if(!empty($parameters))
@@ -78,16 +77,12 @@ class Container {
     
     public function addParameter($key, $value)
     {
-        $key = trim($key);
-        $value = trim($value);
-        
-        $this->parameters[$key] = $value;
+        $this->parameters[trim($key)] = trim($value);
     }
     
     public function hasParameter($key)
     {
-        $key = trim($key);
-        return isset($this->parameters[$key]);
+        return isset($this->parameters[trim($key)]);
     }
     
     public function getParameter($key)
@@ -152,14 +147,12 @@ class Container {
     
     public function hasService($id)
     {
-        $id = trim($id);
-        return isset($this->services[$id]);
+        return isset($this->services[trim($id)]);
     }
     
     protected function hasRegisterService($id)
     {
-        $id = trim($id);
-        return isset($this->registerServices[$id]);
+        return isset($this->registerServices[trim($id)]);
     }
     
     public function getService($id)
@@ -187,8 +180,7 @@ class Container {
     
     protected function constructService($id)
     {
-        $id = trim($id);
-        $service = $this->services[$id];
+        $service = $this->services[trim($id)];
         
         if($service['class'][0] === "%")
         {
