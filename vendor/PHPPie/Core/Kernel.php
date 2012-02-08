@@ -16,6 +16,8 @@ class Kernel implements KernelInterface {
     
     public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
+		\PHPPie\Exception\Handler::initialize($debug);
+		
         $this->debug = $debug;
         $this->dirFrontController = realpath($dirFrontController);
 

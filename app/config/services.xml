@@ -3,6 +3,7 @@
     <parameters>
         <parameter key="router.class">PHPPie\Routing\Router</parameter>
         <parameter key="http.request.class">PHPPie\HTTP\Request</parameter>
+         <parameter key="http.response.class">PHPPie\HTTP\Response</parameter>
     </parameters>
     
     <services>
@@ -11,5 +12,6 @@
         </service>
         
         <service id="http.request" class="%http.request.class%"></service>
+        <service id="http.response" class="%http.response.class%"></service>
     </services>
 </container>

@@ -9,15 +9,15 @@ namespace PHPPie\HTTP;
 
 class Request {
  	
- 	protected $get = array();
- 	protected $post = array();
- 	protected $file = array();
- 	protected $server = array();
+	protected $get    = array();
+	protected $post   = array();
+	protected $file   = array();
+	protected $server = array();
 
  	public function __construct(/*\PHPPie\Core\KernelInterface $kernel*/)
  	{	
-		$this->post = $_POST;
-		$this->file = $_FILES;	
+		$this->post   = $_POST;
+		$this->file   = $_FILES;	
 		$this->server = $_SERVER;
  	}
 

@@ -32,19 +32,19 @@ class Exception extends \Exception{
 	 */ 
 	public function __toString()
 	{
-            $message = 'Error : "'.$this->message.'"';
+            $message = '<strong>Error : </strong>"<em>'.$this->message.'</em>"';
             
             if(!is_null($this->class))
             {
-                $message .= ' on class '.$this->class;
+                $message .= ' on class <em>'.$this->class.'</em>';
             }
             
             if(!is_null($this->method))
             {
-                $message .= ' and method '.$this->method;
+                $message .= ' and method <em>'.$this->method.'</em>';
             }
             
-            $message .= ' on line '.$this->line.' in '.$this->file.'.';
+            $message .= ' on line <strong>'.$this->line.'</strong> in <strong>'.$this->file.'</strong>.';
             return $message;
 	}
 }

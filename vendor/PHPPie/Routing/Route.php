@@ -13,7 +13,7 @@ class Route {
     public $requirements;
     
     public $patternRegexp;
-    public $tokens = array();
+    public $tokens        = array();
     protected $defaultURI = null;
     
     public function __construct($pattern, array $defaults, array $requirements = array(), $patternRegexp = null, $tokens = null)

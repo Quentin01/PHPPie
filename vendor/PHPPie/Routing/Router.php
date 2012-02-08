@@ -9,7 +9,7 @@ namespace PHPPie\Routing;
 
 class Router {
     protected $kernel;
-    protected $routes = array();
+    protected $routes  = array();
     protected $idCache = 'router.cache';
     
     public function __construct(\PHPPie\Core\KernelInterface $kernel)

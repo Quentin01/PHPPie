@@ -8,10 +8,10 @@
 namespace PHPPie\Core;
 
 class Container { 
-    protected $idCache = 'services.cache';
+    protected $idCache          = 'services.cache';
     
-    protected $parameters = array();
-    protected $services = array();
+    protected $parameters       = array();
+    protected $services         = array();
     protected $registerServices = array();
     
     public function __construct(KernelInterface $kernel, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager)

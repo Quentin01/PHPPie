@@ -10,13 +10,13 @@ namespace PHPPie\Autoload;
 class Autoloader {
 
     protected $namespaceFallbacks = array();
-    protected $prefixFallbacks = array();
-    protected $namespaces = array();
-    protected $prefixes = array();
+    protected $prefixFallbacks    = array();
+    protected $namespaces         = array();
+    protected $prefixes           = array();
     
-    protected $cache = array();
-    protected $cacheManager = null;
-    protected $idCache = 'autoload.cache';
+    protected $cache              = array();
+    protected $cacheManager       = null;
+    protected $idCache            = 'autoload.cache';
 
     public function __construct() {
         
