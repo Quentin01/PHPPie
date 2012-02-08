@@ -16,7 +16,7 @@ class Kernel implements KernelInterface {
     
     public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
-		\PHPPie\Exception\Handler::initialize($debug);
+		\PHPPie\Exception\Handler::initialize($this, $debug);
 		
         $this->debug = $debug;
         $this->dirFrontController = realpath($dirFrontController);
@@ -31,12 +31,12 @@ class Kernel implements KernelInterface {
         $route = $this->container->getService('router')->resolve($request->getURI());
         
         if($route === false)
-			throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run');
+			throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
 		
         $parameters = $route->getParameters();
                 
         if(!isset($parameters['_controller']))
-			throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run');
+			throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
         
 		if(!isset($parameters['_action']))
 		{
