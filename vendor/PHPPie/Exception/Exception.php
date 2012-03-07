@@ -49,4 +49,14 @@ class Exception extends \Exception{
             $message .= ' on line <strong>'.$this->line.'</strong> in <strong>'.$this->file.'</strong>.';
             return $message;
 	}
+	
+	public function __get($name)
+	{
+		return (isset($this->$name)) ? $this->$name : false;
+	}
+	
+	public function __set($name, $value)
+	{
+		$this->$name = $value;
+	}
 }

@@ -42,10 +42,33 @@ class Kernel implements KernelInterface {
 		{
 			$data = explode(':', $parameters['_controller']);
 			$parameters['_controller'] = $data[0];
-			$parameters['_action'] = (isset($data[1])) ? $data[1] : null;
+			$parameters['_action'] = (isset($data[1])) ? $data[1] : "index";
 		}
         
         $request->addGet($parameters);
+        
+        if(!$this->autoloader->loadClass($parameters['_controller']))
+            throw new \PHPPie\Exception\Exception('Controller '.$parameters['_controller'].' doesn\'t exists', 'PHPPie\Core\Kernel', 'run');
+            
+        $reflectionClass = new \ReflectionClass($parameters['_controller']);
+        $controller = $reflectionClass->newInstanceArgs(array($this));
+        
+        $returnController = $controller->__runAction($parameters['_controller'], $parameters['_action']);
+        
+        if(is_string($returnController))
+		{
+			// Création de la réponse ( on a le nom de la vue )
+			$response = $this->container->getService('http.response');
+			//$response->setContent($returnController);
+		}
+		elseif(get_class($returnController) == $this->container->getParameter('http.response.class'))
+		{
+			$response = $returnController;
+		}
+		else
+			throw new \PHPPie\Exception\Exception('The controller '.$parameters['_controller'].' has returned a wrong value with the action '.$parameters['_action'].'', 'PHPPie\Core\Kernel', 'run');
+    
+		$response->send();
     }
     
     public function getPathApp()

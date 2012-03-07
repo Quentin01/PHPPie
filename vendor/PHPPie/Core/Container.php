@@ -178,6 +178,17 @@ class Container {
         }
     }
     
+    public function get($name)
+    {
+		if($this->hasService($name))
+			return $this->getService($name);
+			
+		if($this->hasParameter($name))
+			return $this->getParameter($name);
+			
+		return null;
+	}
+    
     protected function constructService($id)
     {
         $service = $this->services[trim($id)];
