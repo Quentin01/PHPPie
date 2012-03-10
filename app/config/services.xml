@@ -2,12 +2,17 @@
 <container>
     <parameters>
         <parameter key="router.class">PHPPie\Routing\Router</parameter>
+        <parameter key="view.class">PHPPie\MVC\View\Twig</parameter>
         <parameter key="http.request.class">PHPPie\HTTP\Request</parameter>
-         <parameter key="http.response.class">PHPPie\HTTP\Response</parameter>
+        <parameter key="http.response.class">PHPPie\HTTP\Response</parameter>
     </parameters>
     
     <services>
         <service id="router" class="%router.class%">
+            <argument>@kernel</argument>
+        </service>
+        
+        <service id="view" class="%view.class%" shared="false">
             <argument>@kernel</argument>
         </service>
         

@@ -15,8 +15,11 @@ $autoloader->registerPrefixes(array(
 
 $autoloader->registerNamespaceFallbacks(array(
     __DIR__.'/vendor',
-    __DIR__.'/app/controllers',
-    __DIR__.'/app/models'
+));
+
+$autoloader->registerDirectories(array(
+	__DIR__.'/app/controllers',
+    __DIR__.'/app/models',
 ));
 
 $autoloader->register();

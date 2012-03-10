@@ -157,6 +157,9 @@ class Container {
     
     public function getService($id)
     {
+		$parameters = func_get_args();
+		array_shift($parameters);
+		
         $id = trim($id);
         if($this->hasService($id))
         {
@@ -169,7 +172,7 @@ class Container {
             }
             else
             {
-                return $this->constructService($id);
+                return $this->constructService($id, $parameters);
             }
         }
         else 
@@ -189,7 +192,7 @@ class Container {
 		return null;
 	}
     
-    protected function constructService($id)
+    protected function constructService($id, array $parameters = array())
     {
         $service = $this->services[trim($id)];
         
@@ -215,7 +218,7 @@ class Container {
             throw new \PHPPie\Exception\Exception('Class '.$service['class'].' doesn\'t exists', 'PHPPie\Core\Container', 'constructService');
         
         $reflectionClass = new \ReflectionClass($service['class']);
-        return $reflectionClass->newInstanceArgs($service['arguments']);
+        return $reflectionClass->newInstanceArgs(array_merge($service['arguments'], $parameters));
     }
     
     protected function registerService($id)

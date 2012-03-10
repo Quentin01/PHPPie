@@ -13,6 +13,7 @@ class Autoloader {
     protected $prefixFallbacks    = array();
     protected $namespaces         = array();
     protected $prefixes           = array();
+    protected $directories        = array();
     
     protected $cache              = array();
     protected $cacheManager       = null;
@@ -45,6 +46,10 @@ class Autoloader {
 
     public function registerPrefixFallbacks(array $dirs) {
         $this->prefixFallbacks = array_merge($dirs, $this->prefixFallbacks);
+    }
+    
+    public function registerDirectories(array $dirs) {
+       $this->directories = array_merge($dirs, $this->directories);
     }
 
     public function registerNamespaces(array $namespaces) {
@@ -136,6 +141,15 @@ class Autoloader {
                 }
             }
         }
+
+        foreach ($this->directories as $dir) {
+			$file = $dir . DIRECTORY_SEPARATOR . $class . '.php';
+			echo $file;
+            if (file_exists($file)) {
+				return $file;
+			}
+		}
+        
         return false;
     }
 

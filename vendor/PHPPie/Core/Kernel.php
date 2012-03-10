@@ -8,8 +8,8 @@
 namespace PHPPie\Core;
 
 class Kernel implements KernelInterface {
-    protected $debug;
-    protected $dirFrontController;
+    public $debug;
+    public $dirFrontController;
     
     public $container;
     public $autoloader;
@@ -54,20 +54,43 @@ class Kernel implements KernelInterface {
         $controller = $reflectionClass->newInstanceArgs(array($this));
         
         $returnController = $controller->__runAction($parameters['_controller'], $parameters['_action']);
+        $defaultView = str_replace('\\', DIRECTORY_SEPARATOR, $parameters['_controller']) . DIRECTORY_SEPARATOR . $parameters['_action'];
         
         if(is_string($returnController))
 		{
-			// Création de la réponse ( on a le nom de la vue )
+			// $returnController is the view pathfile
+			
 			$response = $this->container->getService('http.response');
-			//$response->setContent($returnController);
+			$response->setContent($this->container->getService('view', $returnController)->render());
 		}
 		elseif(get_class($returnController) == $this->container->getParameter('http.response.class'))
 		{
+			// $returnController is the http response
+			
 			$response = $returnController;
 		}
+		elseif(get_class($returnController) == $this->container->getParameter('view.class'))
+		{
+			// $returnController is the view
+			
+			if(is_null($returnController->getPathfile()))
+				$returnController->setPathfile($defaultView);
+			
+			$response = $this->container->getService('http.response');
+			$response->setContent($returnController->render());
+		}
+		elseif(is_null($returnController) || $returnController === false)
+		{
+			// $returnController is null, the default view is used ( {controller}/{action} )
+			
+			$response = $this->container->getService('http.response');
+			$response->setContent($this->container->getService('view', $defaultView)->render());
+		}
 		else
+		{
 			throw new \PHPPie\Exception\Exception('The controller '.$parameters['_controller'].' has returned a wrong value with the action '.$parameters['_action'].'', 'PHPPie\Core\Kernel', 'run');
-    
+		}
+		
 		$response->send();
     }
     
