@@ -25,14 +25,27 @@ class Handler {
 		$exception->file = $errfile;
 		$exception->line = $errline;
 		
-		throw $exception;
+		static::exceptionHandler($exception);
     }
     
     public static function exceptionHandler(\PHPPie\Exception\Exception $exception) {
-		$response = self::$kernel->container->getService('http.response');
+		ob_get_clean();
 		
+		$response = self::$kernel->container->getService('http.response');
 		if(!is_null($exception->statusCode)) $response->setStatusCode($exception->statusCode);
-		$response->setContent($exception);
+		
+		$view = self::$kernel->container->getService('view');
+		
+		if($view->viewExists('error'))
+		{
+			$view->setPathfile('error');
+			$view->addVariable('message', (string) $exception);
+			$response->setContent($view->render());
+		}
+		else
+		{
+			$response->setContent((string) $exception);
+		}
 		
 		$response->send();
 		exit();

@@ -135,7 +135,9 @@ class Kernel implements KernelInterface {
     
     public function getPathViews($real = true)
     {
-        return $this->getPathApp($real).DIRECTORY_SEPARATOR.'views';
+        return array(
+			$this->getPathApp($real).DIRECTORY_SEPARATOR.'views'
+		);
     }
     
     public function getPathWeb($real = true)

@@ -22,8 +22,10 @@ abstract class View {
 	{
 		$this->pathFile = (is_string($pathfile) || is_null($pathfile)) ? $pathfile : (string) $pathfile;
 		
-		if(!is_null($this->pathFile) && !file_exists($this->getRealPathfile()))
-			throw new \PHPPie\Exception\Exception('The view '.$this->getRealPathfile().' doesn\'t exists', 'PHPPie\MVC\View', 'setPathfile');
+		if(!is_null($this->pathFile) && $this->viewExists($this->pathFile) === false) 
+		{
+			//throw new \PHPPie\Exception\Exception('The view '.$this->pathFile.' doesn\'t exists', 'PHPPie\MVC\View', 'setPathfile');
+		}
 	}
 	
 	public function getPathfile()
@@ -54,7 +56,34 @@ abstract class View {
 		}
 	}
 	
+	public function viewExists($pathfile = null)
+	{
+		if(is_null($pathfile))
+			$pathfile = $this->pathFile;
+		
+		$paths = $this->getRealPathfile($pathfile);
+		foreach($paths as $path)
+		{
+			if(file_exists($path))
+				return $path;
+		}
+		
+		return false;
+	}
 	
-	abstract public function getRealPathfile();
+	public function getRealPathfile($pathfile = null)
+	{
+		if(is_null($pathfile))
+			$pathfile = $this->pathFile;
+			
+		$paths = $this->kernel->getPathViews();
+		foreach($paths as &$path)
+		{
+			$path .= DIRECTORY_SEPARATOR . $pathfile . $this->getExtensionFile();
+		}
+		return $paths;
+	}
+	
 	abstract public function render();
+	abstract public function getExtensionFile();
 }

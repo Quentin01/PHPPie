@@ -26,9 +26,9 @@ class Twig extends \PHPPie\MVC\View {
 		$this->environment->addTokenParser(new Twig\RenderTokenParser($this->kernel));
 	}
 
-	public function getRealPathfile()
+	public function getExtensionFile()
 	{
-		return $this->kernel->getPathViews() . DIRECTORY_SEPARATOR . $this->pathFile . '.twig';
+		return '.twig';
 	}
 
 	public function render()
