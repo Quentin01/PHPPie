@@ -29,7 +29,6 @@ class RenderTokenParser extends \Twig_TokenParser {
 		if($this->parser->getStream()->test(\Twig_Token::PUNCTUATION_TYPE, ':'))
 		{
 			$this->parser->getStream()->next();
-			$this->parser->getStream()->expect(\Twig_Token::PUNCTUATION_TYPE, ':');
 			$string .= ':' . $this->parser->getStream()->expect(\Twig_Token::NAME_TYPE)->getValue();
 		}
 		
