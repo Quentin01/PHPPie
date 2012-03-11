@@ -21,7 +21,7 @@ class Exception extends \Exception{
 	 * @param string $method La méthode où a lieu l'erreur
 	 * @return void
 	 */ 
-	public function __construct($message = null, $class = null, $method = null, $statusCode = null)
+	public function __construct($message = null, $class = null, $method = null, $statusCode = 200)
 	{
 		parent::__construct($message);
 		$this->class = $class;
