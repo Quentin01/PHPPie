@@ -12,6 +12,7 @@ class Exception extends \Exception{
 	protected $class;
 	protected $method;
 	public $statusCode;
+	public $trace = array();
 
 	/**
 	 * Constructeur d'une exception
@@ -26,6 +27,7 @@ class Exception extends \Exception{
 		$this->class = $class;
 		$this->method = $method;
 		$this->statusCode = $statusCode;
+		$this->trace = $this->getTraceAsString();
 	}
 
 	/**
@@ -46,7 +48,10 @@ class Exception extends \Exception{
                 $message .= ' and method <em>'.$this->method.'</em>';
             }
             
-            $message .= ' on line <strong>'.$this->line.'</strong> in <strong>'.$this->file.'</strong>.';
+            $message .= ' on line <strong>'.$this->line.'</strong> in <strong>'.$this->file.'</strong>.<br/><br/>';
+            $message .= '<strong>Stack trace : </strong>';
+            $message .= str_replace('#', '<br/>#', $this->trace) . '<br/>';
+            
             return $message;
 	}
 	

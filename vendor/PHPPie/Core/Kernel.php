@@ -40,21 +40,35 @@ class Kernel implements KernelInterface {
         
 		if(!isset($parameters['_action']))
 		{
-			$data = explode(':', $parameters['_controller']);
-			$parameters['_controller'] = $data[0];
-			$parameters['_action'] = (isset($data[1])) ? $data[1] : "index";
+			$data = $this->findControllerAndAction($parameters['_controller']);
+			$parameters['_controller'] = $data['controller'];
+			$parameters['_action'] = $data['action'];
 		}
         
         $request->addGet($parameters);
-        
-        if(!$this->autoloader->loadClass($parameters['_controller']))
-            throw new \PHPPie\Exception\Exception('Controller '.$parameters['_controller'].' doesn\'t exists', 'PHPPie\Core\Kernel', 'run');
+		$this->executeController($parameters['_controller'], $parameters['_action'])->send();
+    }
+    
+    public function findControllerAndAction($string)
+    {
+		$data = explode(':', $string);
+			
+		return array(
+			'controller' => $data[0],
+			'action' => (isset($data[1])) ? $data[1] : "index",
+		);
+	}
+	
+	public function executeController($controllerName, $action)
+	{
+		if(!$this->autoloader->loadClass($controllerName))
+            throw new \PHPPie\Exception\Exception('Controller '.$controllerName.' doesn\'t exists', 'PHPPie\Core\Kernel', 'run');
             
-        $reflectionClass = new \ReflectionClass($parameters['_controller']);
+        $reflectionClass = new \ReflectionClass($controllerName);
         $controller = $reflectionClass->newInstanceArgs(array($this));
         
-        $returnController = $controller->__runAction($parameters['_controller'], $parameters['_action']);
-        $defaultView = str_replace('\\', DIRECTORY_SEPARATOR, $parameters['_controller']) . DIRECTORY_SEPARATOR . $parameters['_action'];
+        $returnController = $controller->__runAction($controllerName, $action);
+        $defaultView = str_replace('\\', DIRECTORY_SEPARATOR, $controllerName) . DIRECTORY_SEPARATOR . $action;
         
         if(is_string($returnController))
 		{
@@ -88,11 +102,11 @@ class Kernel implements KernelInterface {
 		}
 		else
 		{
-			throw new \PHPPie\Exception\Exception('The controller '.$parameters['_controller'].' has returned a wrong value with the action '.$parameters['_action'].'', 'PHPPie\Core\Kernel', 'run');
+			throw new \PHPPie\Exception\Exception('The controller '.$controllerName.' has returned a wrong value with the action '.$action.'', 'PHPPie\Core\Kernel', 'run');
 		}
 		
-		$response->send();
-    }
+		return $response;
+	}
     
     public function getPathApp($real = true)
     {
