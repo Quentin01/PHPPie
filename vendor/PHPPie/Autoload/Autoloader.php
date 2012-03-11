@@ -144,7 +144,7 @@ class Autoloader {
 
         foreach ($this->directories as $dir) {
 			$file = $dir . DIRECTORY_SEPARATOR . $class . '.php';
-			echo $file;
+			
             if (file_exists($file)) {
 				return $file;
 			}
