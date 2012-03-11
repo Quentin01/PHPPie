@@ -19,7 +19,7 @@ class Kernel implements KernelInterface {
 		\PHPPie\Exception\Handler::initialize($this, $debug);
 		
         $this->debug = $debug;
-        $this->dirFrontController = realpath($dirFrontController);
+        $this->dirFrontController = $dirFrontController;
 
 		$this->autoloader = $autoloader;
         $this->container = new Container($this, $this->autoloader, $cacheManager);
@@ -94,54 +94,54 @@ class Kernel implements KernelInterface {
 		$response->send();
     }
     
-    public function getPathApp()
+    public function getPathApp($real = true)
     {
-        return $this->dirFrontController.DIRECTORY_SEPARATOR.'app';
+        return (($real) ? realpath($this->dirFrontController) : $this->dirFrontController).DIRECTORY_SEPARATOR.'app';
     }
     
-    public function getPathConfig()
+    public function getPathConfig($real = true)
     {
-        return $this->getPathApp().DIRECTORY_SEPARATOR.'config';
+        return $this->getPathApp($real).DIRECTORY_SEPARATOR.'config';
     }
     
-    public function getPathCache()
+    public function getPathCache($real = true)
     {
-        return $this->getPathApp().DIRECTORY_SEPARATOR.'cache';
+        return $this->getPathApp($real).DIRECTORY_SEPARATOR.'cache';
     }
     
-     public function getPathControllers()
+     public function getPathControllers($real = true)
     {
-        return $this->getPathApp().DIRECTORY_SEPARATOR.'controllers';
+        return $this->getPathApp($real).DIRECTORY_SEPARATOR.'controllers';
     }
     
-    public function getPathModels()
+    public function getPathModels($real = true)
     {
-        return $this->getPathApp().DIRECTORY_SEPARATOR.'models';
+        return $this->getPathApp($real).DIRECTORY_SEPARATOR.'models';
     }
     
-    public function getPathViews()
+    public function getPathViews($real = true)
     {
-        return $this->getPathApp().DIRECTORY_SEPARATOR.'views';
+        return $this->getPathApp($real).DIRECTORY_SEPARATOR.'views';
     }
     
-    public function getPathWeb()
+    public function getPathWeb($real = true)
     {
-        return $this->dirFrontController.DIRECTORY_SEPARATOR.'web';
+        return (($real) ? realpath($this->dirFrontController) : $this->dirFrontController).DIRECTORY_SEPARATOR.'web';
     }
     
-    public function getPathCss()
+    public function getPathCss($real = true)
     {
-        return $this->getPathWeb().DIRECTORY_SEPARATOR.'css';
+        return $this->getPathWeb($real).DIRECTORY_SEPARATOR.'css';
     }
     
-    public function getPathImages()
+    public function getPathImages($real = true)
     {
-        return $this->getPathWeb().DIRECTORY_SEPARATOR.'images';
+        return $this->getPathWeb($real).DIRECTORY_SEPARATOR.'images';
     }
     
-    public function getPathJs()
+    public function getPathJs($real = true)
     {
-        return $this->getPathWeb().DIRECTORY_SEPARATOR.'js';
+        return $this->getPathWeb($real).DIRECTORY_SEPARATOR.'js';
     }
     
     public function getContainerParameters()
