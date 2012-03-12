@@ -178,6 +178,21 @@ class Request {
  	{
  		return $this->server['REQUEST_URI'];
  	}
+ 	
+ 	public function getCompletURI()
+ 	{
+		$uri = "";
+		
+		if($this->server['REMOTE_PORT'] != "443")
+			$uri = "http:///";
+		else
+			$uri = "https:///";
+			
+		$uri .= $this->getHost();
+		$uri .= '/' . $this->getURI();
+		
+		return str_replace('//', '/', $uri);
+	}
 
  	/**
  	 * Retourne si une requête est une requêta ajax ou non

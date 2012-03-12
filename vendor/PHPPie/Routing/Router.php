@@ -8,7 +8,7 @@
 namespace PHPPie\Routing;
 
 class Router {
-    protected $kernel;
+    public $kernel;
     protected $routes  = array();
     protected $idCache = 'router.cache';
     
@@ -22,7 +22,7 @@ class Router {
 			
 			foreach($data as $name => $routeData)
             {
-				$this->routes[$name] = new Route($routeData['pattern'], $routeData['defaults'], $routeData['requirements'], $routeData['patternRegexp'], $routeData['tokens']);
+				$this->routes[$name] = new Route($this, $routeData['pattern'], $routeData['defaults'], $routeData['requirements'], $routeData['patternRegexp'], $routeData['tokens']);
 			}
 		}
 		else
@@ -81,5 +81,10 @@ class Router {
         }
         return false;
     }
+    
+    public function getURI($name, $slugs = array())
+    {
+		return $this->routes[$name]->getURI($slugs);
+	}
 }
 ?>

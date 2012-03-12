@@ -8,6 +8,7 @@
 namespace PHPPie\Routing;
 
 class Route {
+	public $router;
     public $pattern;
     public $defaults;
     public $requirements;
@@ -16,8 +17,9 @@ class Route {
     public $tokens        = array();
     protected $defaultURI = null;
     
-    public function __construct($pattern, array $defaults, array $requirements = array(), $patternRegexp = null, $tokens = null)
+    public function __construct(\PHPPie\Routing\Router $router, $pattern, array $defaults, array $requirements = array(), $patternRegexp = null, $tokens = null)
     {
+		$this->router = $router;
         $this->pattern = $pattern;
         $this->defaults = $defaults;
         $this->requirements = $requirements;
@@ -37,7 +39,7 @@ class Route {
     {
         $tokens = array();
         $pattern = preg_quote($this->pattern);
-        preg_match_all('#(.?)(\{([a-zA-Z]+)\})#', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+        preg_match_all('#(.?)(\{([a-zA-Z0-9]+)\})#', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
         
         foreach($matches as $match)
         {     
@@ -108,5 +110,21 @@ class Route {
     {
         $this->defaultURI = $uri;
     }
+    
+    public function getURI($slugs = array())
+    {
+		$uri = $this->router->kernel->container->getService('http.request')->getCompletURI() . $this->pattern;
+		preg_match_all('#\{([a-zA-Z0-9]+)\}#', $uri, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+		
+		foreach($matches as $match)
+		{
+			if(isset($slugs[$match[1][0]]))
+				$uri = str_replace($match[0][0], $slugs[$match[1][0]], $uri);
+			else
+				$uri = str_replace($match[0][0], "", $uri);
+		}
+		
+		return $uri;
+	}
 }
 ?>
