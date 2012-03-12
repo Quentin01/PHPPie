@@ -34,13 +34,12 @@ class Twig extends \PHPPie\MVC\View {
 	public function render()
 	{
 		try {
-		$template = $this->environment->loadTemplate($this->pathFile . $this->getExtensionFile());
-		return $template->render($this->variables); 
-	}
-	catch(\Twig_Error $e)
-	{
-		echo $e;
-	}
+			$template = $this->environment->loadTemplate($this->pathFile . $this->getExtensionFile());
+			return $template->render($this->variables); 
+		}
+		catch(\Twig_Error $e) {
+			static::exceptionHandler($e);
+		}
 	}
 	
 	public static function exceptionHandler(\Twig_Error $e)
