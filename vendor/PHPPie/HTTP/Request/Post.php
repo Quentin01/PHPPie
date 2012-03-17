@@ -12,7 +12,8 @@ class Post extends \PHPPie\Core\ArrayData {
 	{
 		foreach($data as $key => $value)
 		{
-			$data[$key] = new self($value);
+			if(is_array($value))
+				$data[$key] = new self($value);
 		}
 		
 		parent::__construct($data);
