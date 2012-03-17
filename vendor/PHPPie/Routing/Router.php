@@ -64,7 +64,7 @@ class Router {
                     $data['defaults'] = array();
                 }
 
-                $this->routes[$name] = new Route($data['pattern'], $data['defaults'], $data['requirements']);
+                $this->routes[$name] = new Route($this, $data['pattern'], $data['defaults'], $data['requirements']);
             }
         }
     }
@@ -84,7 +84,10 @@ class Router {
     
     public function getURI($name, $slugs = array())
     {
-		return $this->routes[$name]->getURI($slugs);
+		if(isset($this->routes[$name]))
+			return $this->routes[$name]->getURI($slugs);
+		else
+			return false;
 	}
 }
 ?>

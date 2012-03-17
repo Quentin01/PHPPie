@@ -124,7 +124,7 @@ class Route {
 				$uri = str_replace($match[0][0], "", $uri);
 		}
 		
-		return $uri;
+		return str_replace(':/', '://', str_replace('//', '/', $uri));
 	}
 }
 ?>

@@ -19,6 +19,17 @@ class Extension extends \Twig_Extension {
     {
         return array(
             'render' => new \Twig_Function_Method($this, 'functionRender', array('is_safe' => array('html'))),
+            'link' => new \Twig_Function_Method($this, 'functionLink'),
+        );
+    }
+    
+    public function getGlobals()
+    {
+        return array(
+			'kernel' => $this->kernel,
+			'container' => $this->kernel->container,
+            'router' => $this->kernel->container->getService('router'),
+            'httprequest' => $this->kernel->container->getService('http.request'),
         );
     }
 	
@@ -32,5 +43,10 @@ class Extension extends \Twig_Extension {
 		$data = $this->kernel->findControllerAndAction($string);
 		$response = $this->kernel->executeController($data['controller'], $data['action']);
 		return $response->getContent();
+	}
+	
+	public function functionLink($name, $slugs = array())
+	{
+		return $this->kernel->container->getService('router')->getURI($name, $slugs);
 	}
 }
