@@ -44,8 +44,6 @@ class Kernel implements KernelInterface {
 			$parameters['_controller'] = $data['controller'];
 			$parameters['_action'] = $data['action'];
 		}
-		
-		$parameters['teste'] = "test";
         
         $request->get->append($parameters);
 		$this->executeController($parameters['_controller'], $parameters['_action'])->send();
