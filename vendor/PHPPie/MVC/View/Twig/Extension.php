@@ -29,7 +29,10 @@ class Extension extends \Twig_Extension {
 			'kernel' => $this->kernel,
 			'container' => $this->kernel->container,
             'router' => $this->kernel->container->getService('router'),
-            'http' => array('request' => $this->kernel->container->getService('http.request')),
+            'http' => array(
+				'request' => $this->kernel->container->getService('http.request'),
+				'response' => $this->kernel->container->getService('http.response')
+			),
         );
     }
 	
