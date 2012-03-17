@@ -58,11 +58,11 @@ class Files extends \PHPPie\Core\ArrayData {
 		return $this;
 	}
 	
-	public function setConstraintExtension($size)
+	public function setConstraintMinSize($size)
 	{
 		foreach($this as $value)
 		{
-			$value->setConstraintExtension($size);
+			$value->setConstraintMinSize($size);
 		}
 		
 		return $this;

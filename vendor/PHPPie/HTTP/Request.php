@@ -7,7 +7,7 @@
 
 namespace PHPPie\HTTP;
 
-class Request {
+class Request implements \ArrayAccess{
  	
 	protected $get    = array();
 	protected $post   = array();
@@ -24,8 +24,29 @@ class Request {
  	
  	public function __get($name)
  	{
-		if(is_int(array_search($name, array('get', 'post', 'files', 'server'))))
+		if($this->offsetExists($name))
+			return $this->offsetGet($name);
+	}
+	
+	public function offsetGet($name)
+	{
+		if($this->offsetExists($name))
 			return $this->$name;
+	}
+	
+	public function offsetExists($name)
+	{
+		return (in_array($name, array('get', 'post', 'files', 'server')));
+	}
+	
+	public function offsetSet($name, $value)
+	{
+		throw new \PHPPie\Exception\Exception('Read only', 'PHPPie\HTTP\Request', 'offsetSet');
+	}
+	
+	public function offsetUnset($name)
+	{
+		throw new \PHPPie\Exception\Exception('Read only', 'PHPPie\HTTP\Request', 'offsetSet');
 	}
 
  	public function getPreviousURI()

@@ -41,7 +41,7 @@ class File extends \PHPPie\Core\ArrayData {
 		return $this;
 	}
 	
-	public function setConstraintExtension($size)
+	public function setConstraintMinSize($size)
 	{
 		$this->minsize = $size;
 		return $this;
