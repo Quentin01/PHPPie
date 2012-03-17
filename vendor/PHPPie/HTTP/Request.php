@@ -88,8 +88,8 @@ class Request {
 
  	public function getIp()
  	{
-		if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){ return $_SERVER['HTTP_X_FORWARDED_FOR']; }
-		elseif(isset($_SERVER['HTTP_CLIENT_IP'])){ return $_SERVER['HTTP_CLIENT_IP']; }
+		if(isset($this->server['HTTP_X_FORWARDED_FOR'])){ return $this->server['HTTP_X_FORWARDED_FOR']; }
+		elseif(isset($this->server['HTTP_CLIENT_IP'])){ return $this->server['HTTP_CLIENT_IP']; }
  		else{ return $this->server['REMOTE_ADDR']; }
  	}
  }
