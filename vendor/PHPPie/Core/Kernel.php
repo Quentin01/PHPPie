@@ -14,6 +14,8 @@ class Kernel implements KernelInterface {
     public $container;
     public $autoloader;
     
+    protected $pathViews;
+    
     public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
 		\PHPPie\Exception\Handler::initialize($this, $debug);
@@ -154,10 +156,15 @@ class Kernel implements KernelInterface {
     
     public function getPathViews($real = true)
     {
-        return array(
+        return array_merge(array(
 			$this->getPathApp($real).DIRECTORY_SEPARATOR.'views'
-		);
+		), $this->pathViews);
     }
+    
+    public function addPathViews($path)
+    {
+		$this->pathViews[] = $path;
+	}
     
     public function getPathWeb($real = true)
     {
