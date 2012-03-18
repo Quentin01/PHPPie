@@ -14,7 +14,7 @@ class Kernel implements KernelInterface {
     public $container;
     public $autoloader;
     
-    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
+    public function __construct($dirFrontController, $uri, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
 		\PHPPie\Exception\Handler::initialize($this, $debug);
 		
@@ -23,16 +23,18 @@ class Kernel implements KernelInterface {
 
 		$this->autoloader = $autoloader;
         $this->container = new Container($this, $this->autoloader, $cacheManager);
+        
+        $this->container->getService('http.request')->setRoutingURI($uri);
     }
     
     public function run()
     {
-        $request = $this->container->getService('http.request');
-        $route = $this->container->getService('router')->resolve($request->getURI());
+        $request = $this->container->getService('http.request');        
+        $route = $this->container->getService('router')->resolve($request->getRoutingURI());
         
         if($route === false)
         {
-			if(($pos = strpos($request->getURI(), '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . substr($request->getURI(), $pos))))
+			if(($pos = strpos($request->getRoutingURI(), '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . substr($request->getURI(), $pos))))
 			{
 				$response = $this->container->getService('http.response');
 				$finfo = new \finfo(FILEINFO_MIME);
@@ -44,7 +46,7 @@ class Kernel implements KernelInterface {
 			}
 			else
 			{
-				throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
+				throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getRoutingURI(), 'PHPPie\Core\Kernel', 'run', 404);
 			}
 		}
 		else
@@ -52,7 +54,7 @@ class Kernel implements KernelInterface {
 			$parameters = $route->getParameters();
 					
 			if(!isset($parameters['_controller']))
-				throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
+				throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getRoutingURI(), 'PHPPie\Core\Kernel', 'run', 404);
 			
 			if(!isset($parameters['_action']))
 			{

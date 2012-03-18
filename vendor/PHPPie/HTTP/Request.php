@@ -13,6 +13,8 @@ class Request implements \ArrayAccess{
 	protected $post   = array();
 	protected $files  = array();
 	protected $server = array();
+	
+	protected $routingURI = null;
 
  	public function __construct()
  	{	
@@ -58,6 +60,16 @@ class Request implements \ArrayAccess{
  	{
  		return $this->server['REQUEST_URI'];
  	}
+ 	
+ 	public function setRoutingURI($uri)
+ 	{
+		$this->routingURI = $uri;
+	}
+	
+	public function getRoutingURI()
+	{
+		return $this->routingURI;
+	}
  	
  	public function getCompletURI()
  	{
