@@ -46,7 +46,7 @@ class Request implements \ArrayAccess{
 	
 	public function offsetUnset($name)
 	{
-		throw new \PHPPie\Exception\Exception('Read only', 'PHPPie\HTTP\Request', 'offsetSet');
+		throw new \PHPPie\Exception\Exception('Read only', 'PHPPie\HTTP\Request', 'offsetUnset');
 	}
 
  	public function getPreviousURI()

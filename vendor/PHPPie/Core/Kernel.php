@@ -31,22 +31,39 @@ class Kernel implements KernelInterface {
         $route = $this->container->getService('router')->resolve($request->getURI());
         
         if($route === false)
-			throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
-		
-        $parameters = $route->getParameters();
-                
-        if(!isset($parameters['_controller']))
-			throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
-        
-		if(!isset($parameters['_action']))
-		{
-			$data = $this->findControllerAndAction($parameters['_controller']);
-			$parameters['_controller'] = $data['controller'];
-			$parameters['_action'] = $data['action'];
+        {
+			if(($pos = strpos($request->getURI(), '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . substr($request->getURI(), $pos))))
+			{
+				$response = $this->container->getService('http.response');
+				$finfo = new \finfo(FILEINFO_MIME);
+				
+				$response->setContent(file_get_contents($pathfile));
+				$response->setHeader('Content-Type', $finfo->file($pathfile));
+				
+				$response->send();
+			}
+			else
+			{
+				throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
+			}
 		}
-        
-        $request->get->append($parameters);
-		$this->executeController($parameters['_controller'], $parameters['_action'])->send();
+		else
+		{
+			$parameters = $route->getParameters();
+					
+			if(!isset($parameters['_controller']))
+				throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$request->getURI(), 'PHPPie\Core\Kernel', 'run', 404);
+			
+			if(!isset($parameters['_action']))
+			{
+				$data = $this->findControllerAndAction($parameters['_controller']);
+				$parameters['_controller'] = $data['controller'];
+				$parameters['_action'] = $data['action'];
+			}
+			
+			$request->get->append($parameters);
+			$this->executeController($parameters['_controller'], $parameters['_action'])->send();
+		}
     }
     
     public function findControllerAndAction($string)
