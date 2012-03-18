@@ -14,7 +14,7 @@ class Kernel implements KernelInterface {
     public $container;
     public $autoloader;
     
-    public function __construct($dirFrontController, $uri, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
+    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
 		\PHPPie\Exception\Handler::initialize($this, $debug);
 		
@@ -23,6 +23,9 @@ class Kernel implements KernelInterface {
 
 		$this->autoloader = $autoloader;
         $this->container = new Container($this, $this->autoloader, $cacheManager);
+        
+        $uri = dirname(DIRECTORY_SEPARATOR . array_search('', $_GET));
+		unset($_GET[$uri]);
         
         $this->container->getService('http.request')->setRoutingURI($uri);
     }

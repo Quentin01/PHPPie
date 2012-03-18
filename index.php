@@ -27,10 +27,7 @@ $autoloader->register();
 $cacheManager = new PHPPie\Cache\PHP(__DIR__.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache');
 $autoloader->enableCache($cacheManager);
 
-$uri = dirname(DIRECTORY_SEPARATOR . array_search('', $_GET));
-unset($_GET[$uri]);
-
-$kernel = new PHPPie\Core\Kernel(__DIR__, $uri, $autoloader, $cacheManager, true);
+$kernel = new PHPPie\Core\Kernel(__DIR__, $autoloader, $cacheManager, true);
 $kernel->run();
 
 $autoloader->save();
