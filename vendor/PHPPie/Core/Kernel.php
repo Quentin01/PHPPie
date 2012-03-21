@@ -14,7 +14,7 @@ class Kernel implements KernelInterface {
     public $container;
     public $autoloader;
     
-    protected $pathViews;
+    protected $pathViews = array();
     
     public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
     {
@@ -30,7 +30,7 @@ class Kernel implements KernelInterface {
     public function run()
     {
         $request = $this->container->getService('http.request');        
-        $routingURI = substr($request->getURI(), strlen(substr($this->dirFrontController, strlen($request->server->offsetGet('DOCUMENT_ROOT')))));
+        $routingURI = substr($request->getURI(), strlen(dirname($request->server->offsetGet('SCRIPT_NAME'))));
         
         $route = $this->container->getService('router')->resolve($routingURI);
         
