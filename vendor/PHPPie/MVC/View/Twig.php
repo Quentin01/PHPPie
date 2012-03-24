@@ -58,4 +58,14 @@ class Twig extends \PHPPie\MVC\View {
 		
 		throw \PHPPie\Exception\Handler::exceptionHandler($exception);
 	}
+	
+	public static function getEnvironnement()
+	{
+		return self::$environment;
+	}
+	
+	public static function getLoaderFilesystem()
+	{
+		return self::$loaderFilesystem;
+	}
 }
