@@ -52,7 +52,8 @@ class Route {
             }
             else
             {
-                if($match[0][1] == 0 && @$this->pattern[($match[0][1] + strlen($match[0][0]))] !== '/')
+				echo $this->pattern . "<br/>";
+                if($match[0][1] == 0 && !in_array(@$this->pattern[($match[0][1] + strlen($match[0][0]))], array('/', '\\', '.', '-')))
                     $pattern = str_replace(preg_quote($match[1][0]).'\\{'.$match[3][0].'\\}', preg_quote($match[1][0]).'(?P<'.$match[3][0].'>'.$requirement.')?', $pattern);
                 else
                     $pattern = str_replace(preg_quote($match[1][0]).'\\{'.$match[3][0].'\\}', '('.preg_quote($match[1][0]).'(?P<'.$match[3][0].'>'.$requirement.')?)?', $pattern);
