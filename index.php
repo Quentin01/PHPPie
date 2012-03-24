@@ -7,6 +7,8 @@ $autoloader->registerNamespaces(array(
     'PHPPie'           => __DIR__.'/vendor/PHPPie',
     'Doctrine'         => __DIR__.'/vendor/Doctrine',
     'Symfony'          => __DIR__.'/vendor/Doctrine/Symfony',
+    'Entities'          => __DIR__.'/app/models/Entities',
+    'Proxy'          => __DIR__.'/app/models/Proxy',
 ));
 
 $autoloader->registerPrefixes(array(
