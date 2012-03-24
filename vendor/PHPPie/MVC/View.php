@@ -8,13 +8,13 @@
 namespace PHPPie\MVC;
 
 abstract class View {
-	protected $kernel;
+	protected static $kernel = null;
 	protected $pathFile;
 	protected $variables = array();
 	
 	public function __construct(\PHPPie\Core\KernelInterface $kernel, $pathfile = null)
 	{
-		$this->kernel = $kernel;
+		self::$kernel = $kernel;
 		$this->setPathfile($pathfile);
 	}
 	
@@ -76,7 +76,7 @@ abstract class View {
 		if(is_null($pathfile))
 			$pathfile = $this->pathFile;
 			
-		$paths = $this->kernel->getPathViews();
+		$paths = self::$kernel->getPathViews();
 		foreach($paths as &$path)
 		{
 			$path .= DIRECTORY_SEPARATOR . $pathfile . $this->getExtensionFile();
