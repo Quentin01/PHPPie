@@ -1,4 +1,4 @@
 index:
-    pattern: /PHPPie/
+    pattern: /
     defaults:
         _controller: "Controller:index"

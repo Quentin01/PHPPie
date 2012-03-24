@@ -1,0 +1,23 @@
+dev:
+    connections:
+        default:
+            driver: pdo_mysql
+            host: localhost
+            dbname: db
+            user: root
+            password: ""
+prod:
+    connections:
+        default:
+            driver: pdo_mysql
+            host: adresse_host
+            dbname: db
+            user: user
+            password: password
+
+orm:
+    default_connection: default
+    default_entity_manager: default
+    entity_managers:
+        default:
+            connection: default

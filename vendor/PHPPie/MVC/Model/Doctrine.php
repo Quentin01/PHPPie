@@ -1,0 +1,118 @@
+<?php
+
+/*
+ * Doctrine service
+ * Created on 24/03/12 at 13:25
+ */
+
+namespace PHPPie\MVC\Model;
+
+class Doctrine {
+	protected $kernel;
+	protected $configuration;
+	
+	protected $doctrineConfiguration;
+	protected $doctrineCache;
+	protected $doctrineDriver;
+	
+	protected $connections = array();
+	protected $entityManagers = array();
+	
+	public function __construct(\PHPPie\Core\KernelInterface $kernel)
+	{
+		$this->kernel = $kernel;
+		$this->configuration = new \PHPPie\MVC\Model\Doctrine\Configuration($this->kernel->getPathConfig() . DIRECTORY_SEPARATOR . 'database.yml', $this->kernel->dev);
+	
+		if($this->kernel->dev) 
+		{
+			$this->doctrineCache = new \Doctrine\Common\Cache\ArrayCache;
+		}
+		else
+		{
+			$this->doctrineCache = new \Doctrine\Common\Cache\ApcCache;
+		}
+	
+		$this->doctrineConfiguration = new \Doctrine\ORM\Configuration();
+		
+		$this->doctrineConfiguration->setMetadataCacheImpl($this->doctrineCache);
+		$this->doctrineConfiguration->setQueryCacheImpl($this->doctrineCache);
+		
+		$this->doctrineDriver = $this->doctrineConfiguration->newDefaultAnnotationDriver($this->kernel->getPathModels() . DIRECTORY_SEPARATOR . 'Entities');
+		$this->doctrineConfiguration->setMetadataDriverImpl($this->doctrineDriver);
+		
+		$this->doctrineConfiguration->setProxyDir($this->kernel->getPathModels() . DIRECTORY_SEPARATOR . 'Proxy');
+		$this->doctrineConfiguration->setProxyNamespace('Proxy');
+		
+		if($this->kernel->dev) 
+		{
+			$this->doctrineConfiguration->setAutoGenerateProxyClasses(true);
+		}
+		else
+		{
+			$this->doctrineConfiguration->setAutoGenerateProxyClasses(false);
+		}
+	
+		$this->loadConnections();
+		$this->loadEntityManagers();
+	}
+	
+	protected function loadConnections()
+	{
+		foreach($this->configuration->getConnections() as $name => $data)
+		{
+			$this->connections[$name] = \Doctrine\DBAL\DriverManager::getConnection($data, $this->doctrineConfiguration);
+		}
+	}
+	
+	protected function loadEntityManagers()
+	{
+		foreach($this->configuration->getEntityManagers() as $name => $data)
+		{
+			$nameConnection = "";
+			if(!isset($data['connection']))
+			{
+				$nameConnection = $this->configuration->getNameDefaultConnection();
+				
+				if($nameConnection === false)
+					throw new \PHPPie\Exception\Exception('No default connection for the entity manager : ' . $name, 'PHPPie\MVC\Model\Doctrine', 'loadEntityManagers');
+			}
+			else
+			{
+				$nameConnection = $data['connection'];
+			}
+			
+			if(!isset($this->connections[$nameConnection]))
+				throw new \PHPPie\Exception\Exception('Connection ' . $nameConnection . ' doesn\'t exists for the entity manager : ' . $name, 'PHPPie\MVC\Model\Doctrine', 'loadEntityManagers');
+				
+			$this->entityManagers[$name] = \Doctrine\ORM\EntityManager::create($this->connections[$nameConnection], $this->doctrineConfiguration);
+		}
+	}
+	
+	public function getEntityManager($name = null)
+	{
+		if(is_null($name))
+		{
+			if(($name = $this->configuration->getNameDefaultEntityManager()) === false)
+				throw new \PHPPie\Exception\Exception('No name passed to the method and no default entity manager name', 'PHPPie\MVC\Model\Doctrine', 'getEntityManager');
+		}
+		
+		if(!isset($this->entityManagers[$name]))
+			throw new \PHPPie\Exception\Exception('The entity manager ' . $name . ' doesn\'t exists', 'PHPPie\MVC\Model\Doctrine', 'getEntityManager');
+		
+		return $this->entityManagers[$name];
+	}
+	
+	public function getConnection($name = null)
+	{
+		if(is_null($name))
+		{
+			if(($name = $this->configuration->getNameDefaultConnection()) === false)
+				throw new \PHPPie\Exception\Exception('No name passed to the method and no default connection name', 'PHPPie\MVC\Model\Doctrine', 'getConnection');
+		}
+		
+		if(!isset($this->connections[$name]))
+			throw new \PHPPie\Exception\Exception('The connection ' . $name . ' doesn\'t exists', 'PHPPie\MVC\Model\Doctrine', 'getConnection');
+		
+		return $this->connections[$name];
+	}
+}

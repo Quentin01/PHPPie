@@ -8,6 +8,7 @@
 namespace PHPPie\Core;
 
 class Kernel implements KernelInterface {
+    public $dev;
     public $debug;
     public $dirFrontController;
     
@@ -16,11 +17,13 @@ class Kernel implements KernelInterface {
     
     protected $pathViews = array();
     
-    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $debug = false)
+    public function __construct($dirFrontController, \PHPPie\Autoload\Autoloader $autoloader, \PHPPie\Cache\CacheInterface $cacheManager, $dev = false)
     {
-		\PHPPie\Exception\Handler::initialize($this, $debug);
+		\PHPPie\Exception\Handler::initialize($this, $dev);
 		
-        $this->debug = $debug;
+        $this->dev = $dev;
+        $this->debug = $this->dev;
+        
         $this->dirFrontController = $dirFrontController;
 
 		$this->autoloader = $autoloader;

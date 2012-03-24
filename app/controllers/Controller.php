@@ -13,6 +13,9 @@ class Controller extends \PHPPie\MVC\Controller {
 		
 		//return $this->get('view', 'Test');
 		
+		$doctrine = $this->get('doctrine');
+		$em = $doctrine->getEntityManager();
+		
 		$view = $this->get('view'); // Egale à $this->get('view', 'Controller/index');
 		$view->addVariables(array('name' => 'Quentin'));
 		return $view;

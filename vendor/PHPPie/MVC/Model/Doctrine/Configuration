@@ -1,0 +1,10 @@
+<?php
+
+/*
+ * Twig View
+ * Created on 10/03/12 at 19:30
+ */
+
+namespace PHPPie\MVC\Models\Doctrine
+
+class Configuration extends \PHPPie\MVC\View {
