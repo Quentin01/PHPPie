@@ -226,5 +226,16 @@ class Container {
         $id = trim($id);
         $this->registerServices[$id] = $this->constructService($id);
     }
+    
+    public function callStaticMethod($serviceName, $methodName, $parameters = array())
+    {
+		if(!$this->hasService($serviceName))
+			throw new \PHPPie\Exception\Exception('Service '.$id.' doesn\'t exists', 'PHPPie\Core\Container', 'callStaticMethod');
+			
+		if(!method_exists($this->services[trim($serviceName)]['class'], $methodName))
+			throw new \PHPPie\Exception\Exception('Service '.$id.' haven\'t a method called ' . $methodName, 'PHPPie\Core\Container', 'callStaticMethod');
+			
+		return call_user_func_array(array($this->services[trim($serviceName)]['class'], $methodName), $parameters);
+	}
 }
 ?>
