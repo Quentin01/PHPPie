@@ -61,8 +61,6 @@ class Request implements \ArrayAccess{
  	
  	public function getCompletURI()
  	{
-		$uri = "";
-		
 		if($this->server['REMOTE_PORT'] != "443")
 			$uri = "http:///";
 		else
@@ -76,15 +74,7 @@ class Request implements \ArrayAccess{
 
 	public function isAjaxRequest()
  	{
- 		if (isset($this->server['HTTP_X_REQUESTED_WITH']) && strtolower($this->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
- 		{
- 	 		return true;
- 	 	}
-
- 	 	else
- 		{
- 	 		return false;
- 		}
+ 		return (isset($this->server['HTTP_X_REQUESTED_WITH']) && strtolower($this->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
  	}
 
  	public function getPort()
