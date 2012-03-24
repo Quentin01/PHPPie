@@ -8,17 +8,14 @@
 namespace PHPPie\Routing;
 
 class Router {
-    public $kernel;
     protected $routes  = array();
     protected $idCache = 'router.cache';
     
-    public function __construct(\PHPPie\Core\KernelInterface $kernel)
+    public function __construct()
     {
-        $this->kernel = $kernel;
-        
-        if($this->kernel->container->getService('cache')->isFresh($this->idCache, $this->kernel->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml'))
+        if(\PHPPie\Core\StaticContainer::getService('cache')->isFresh($this->idCache, \PHPPie\Core\StaticContainer::getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml'))
 		{
-			$data = $this->kernel->container->getService('cache')->get($this->idCache);
+			$data = \PHPPie\Core\StaticContainer::getService('cache')->get($this->idCache);
 			
 			foreach($data as $name => $routeData)
             {
@@ -41,13 +38,13 @@ class Router {
 				);
 			}
 			
-			$this->kernel->container->getService('cache')->add($this->idCache, $data);
+			\PHPPie\Core\StaticContainer::getService('cache')->add($this->idCache, $data);
 		}
     }
     
     protected function loadRoutes()
     {
-        $file = new \PHPPie\File\Yaml($this->kernel->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml');
+        $file = new \PHPPie\File\Yaml(\PHPPie\Core\StaticContainer::getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml');
         $routesData = $file->readData();
         
         if(is_array($routesData))

@@ -11,9 +11,9 @@ class Twig extends \PHPPie\MVC\View {
 	protected static $loaderFilesystem = null;
 	protected static $environment = null;
 	
-	public function __construct(\PHPPie\Core\KernelInterface $kernel, $pathfile = null)
+	public function __construct($pathfile = null)
 	{
-		parent::__construct($kernel, $pathfile);
+		parent::__construct($pathfile);
 		
 		if(is_null(self::$environment))
 			self::initialize();
@@ -21,16 +21,18 @@ class Twig extends \PHPPie\MVC\View {
 	
 	protected static function initialize()
 	{
+		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
+		
 		set_exception_handler(array(__CLASS__, 'exceptionHandler'));
 		
-		self::$loaderFilesystem = new \Twig_Loader_Filesystem(self::$kernel->getPathViews());
+		self::$loaderFilesystem = new \Twig_Loader_Filesystem($kernel->getPathViews());
 		self::$environment = new \Twig_Environment(self::$loaderFilesystem, array(
-			'cache' => (!self::$kernel->debug) ? self::$kernel->getPathCache() : false,
-			'debug' => self::$kernel->debug
+			'cache' => (!$kernel->debug) ? $kernel->getPathCache() : false,
+			'debug' => $kernel->debug
 		));
 		
-		self::$environment->addExtension(new Twig\Extension(self::$kernel));
-		self::$environment->addTokenParser(new Twig\RenderTokenParser(self::$kernel));
+		self::$environment->addExtension(new Twig\Extension());
+		self::$environment->addTokenParser(new Twig\RenderTokenParser());
 	}
 
 	public function getExtensionFile()

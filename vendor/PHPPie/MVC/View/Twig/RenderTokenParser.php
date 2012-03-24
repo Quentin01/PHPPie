@@ -8,11 +8,9 @@
 namespace PHPPie\MVC\View\Twig;
 
 class RenderTokenParser extends \Twig_TokenParser {
-	protected $kernel;
-	
-	public function __construct(\PHPPie\Core\KernelInterface $kernel)
+	public function __construct()
 	{
-		$this->kernel = $kernel;
+		
 	}
 	
 	public function getTag()

@@ -8,11 +8,9 @@
 namespace PHPPie\MVC\View\Twig;
 
 class Extension extends \Twig_Extension {
-	protected $kernel;
-	
-	public function __construct(\PHPPie\Core\KernelInterface $kernel)
+	public function __construct()
 	{
-		$this->kernel = $kernel;
+		
 	}
 	
 	public function getFunctions()
@@ -25,13 +23,15 @@ class Extension extends \Twig_Extension {
     
     public function getGlobals()
     {
+		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
+		
         return array(
-			'kernel' => $this->kernel,
-			'container' => $this->kernel->container,
-            'router' => $this->kernel->container->getService('router'),
+			'kernel' => $kernel,
+			'container' => $kernel->container,
+            'router' => $kernel->container->getService('router'),
             'http' => array(
-				'request' => $this->kernel->container->getService('http.request'),
-				'response' => $this->kernel->container->getService('http.response')
+				'request' => $kernel->container->getService('http.request'),
+				'response' => $kernel->container->getService('http.response')
 			),
         );
     }
@@ -43,13 +43,15 @@ class Extension extends \Twig_Extension {
 	
 	public function functionRender($string)
 	{
-		$data = $this->kernel->findControllerAndAction($string);
-		$response = $this->kernel->executeController($data['controller'], $data['action']);
+		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
+		
+		$data = $kernel->findControllerAndAction($string);
+		$response = $kernel->executeController($data['controller'], $data['action']);
 		return $response->getContent();
 	}
 	
 	public function functionLink($name, $slugs = array())
 	{
-		return $this->kernel->container->getService('router')->getURI($name, $slugs);
+		return \PHPPie\Core\StaticContainer::getService('kernel')->container->getService('router')->getURI($name, $slugs);
 	}
 }

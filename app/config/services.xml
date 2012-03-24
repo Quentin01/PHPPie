@@ -9,18 +9,9 @@
     </parameters>
     
     <services>
-        <service id="router" class="%router.class%">
-            <argument>@kernel</argument>
-        </service>
-        
-        <service id="view" class="%view.class%" shared="false">
-            <argument>@kernel</argument>
-        </service>
-        
-        <service id="doctrine" class="%doctrine.class%">
-            <argument>@kernel</argument>
-        </service>
-        
+        <service id="router" class="%router.class%"></service>
+        <service id="view" class="%view.class%" shared="false"></service>
+        <service id="doctrine" class="%doctrine.class%"></service>
         <service id="http.request" class="%http.request.class%"></service>
         <service id="http.response" class="%http.response.class%"></service>
     </services>

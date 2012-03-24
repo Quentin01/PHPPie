@@ -8,7 +8,6 @@
 namespace PHPPie\MVC\Model;
 
 class Doctrine {
-	protected $kernel;
 	protected $configuration;
 	
 	protected $doctrineConfiguration;
@@ -18,12 +17,13 @@ class Doctrine {
 	protected $connections = array();
 	protected $entityManagers = array();
 	
-	public function __construct(\PHPPie\Core\KernelInterface $kernel)
+	public function __construct()
 	{
-		$this->kernel = $kernel;
-		$this->configuration = new \PHPPie\MVC\Model\Doctrine\Configuration($this->kernel->getPathConfig() . DIRECTORY_SEPARATOR . 'database.yml', $this->kernel->dev);
+		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
+		
+		$this->configuration = new \PHPPie\MVC\Model\Doctrine\Configuration($kernel->getPathConfig() . DIRECTORY_SEPARATOR . 'database.yml', $kernel->dev);
 	
-		if($this->kernel->dev) 
+		if($kernel->dev) 
 		{
 			$this->doctrineCache = new \Doctrine\Common\Cache\ArrayCache;
 		}
@@ -37,13 +37,13 @@ class Doctrine {
 		$this->doctrineConfiguration->setMetadataCacheImpl($this->doctrineCache);
 		$this->doctrineConfiguration->setQueryCacheImpl($this->doctrineCache);
 		
-		$this->doctrineDriver = $this->doctrineConfiguration->newDefaultAnnotationDriver($this->kernel->getPathModels() . DIRECTORY_SEPARATOR . 'Entities');
+		$this->doctrineDriver = $this->doctrineConfiguration->newDefaultAnnotationDriver($kernel->getPathModels() . DIRECTORY_SEPARATOR . 'Entities');
 		$this->doctrineConfiguration->setMetadataDriverImpl($this->doctrineDriver);
 		
-		$this->doctrineConfiguration->setProxyDir($this->kernel->getPathModels() . DIRECTORY_SEPARATOR . 'Proxy');
+		$this->doctrineConfiguration->setProxyDir($kernel->getPathModels() . DIRECTORY_SEPARATOR . 'Proxy');
 		$this->doctrineConfiguration->setProxyNamespace('Proxy');
 		
-		if($this->kernel->dev) 
+		if($kernel->dev) 
 		{
 			$this->doctrineConfiguration->setAutoGenerateProxyClasses(true);
 		}

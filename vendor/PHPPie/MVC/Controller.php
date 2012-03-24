@@ -8,11 +8,9 @@
 namespace PHPPie\MVC;
 
 class Controller {
-	protected $kernel;
-	
-	public function __construct(\PHPPie\Core\KernelInterface $kernel)
+	public function __construct()
 	{
-		$this->kernel = $kernel;
+		
 	}
 	
 	public function __runAction($controller, $action)
@@ -36,17 +34,19 @@ class Controller {
 		if(isset($this->$name))
 			return $this->$name;
 			
-		if($this->kernel->container->hasService($name))
+		if(\PHPPie\Core\StaticContainer::hasService($name))
 		{
-			$reflectionMethod = new \ReflectionMethod($this->kernel->container, 'getService');
-			return $reflectionMethod->invokeArgs($this->kernel->container, array_merge(array($name), $parameters));
+			$reflectionMethod = new \ReflectionMethod(\PHPPie\Core\StaticContainer::$instance, 'getService');
+			return $reflectionMethod->invokeArgs(\PHPPie\Core\StaticContainer::$instance, array_merge(array($name), $parameters));
 		}
 			
-		if($this->kernel->container->hasParameter($name))
-			return $this->kernel->container->getParameter($name);
+		if(\PHPPie\Core\StaticContainer::hasParameter($name))
+			return \PHPPie\Core\StaticContainer::getParameter($name);
 			
-		if(isset($this->kernel->$name))
-			return $this->kernel->$name;
+		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
+		
+		if(isset($kernel->$name))
+			return $kernel->$name;
 			
 		return null;
 	}

@@ -8,14 +8,8 @@
 namespace PHPPie\Exception;
 
 class Handler {
-	public static $debug = false;
-	public static $kernel = null;
-	
-	public static function initialize(\PHPPie\Core\KernelInterface &$kernel, $debug)
-	{
-		self::$debug = $debug;
-		self::$kernel = $kernel;
-		
+	public static function initialize()
+	{	
         set_error_handler(array(__CLASS__, 'errorHandler'));
         set_exception_handler(array(__CLASS__, 'exceptionHandler'));
         set_exception_handler(array(__CLASS__, 'nativeExceptionHandler'));
@@ -32,10 +26,10 @@ class Handler {
     public static function exceptionHandler(\PHPPie\Exception\Exception $exception) {
 		ob_get_clean();
 		
-		$response = self::$kernel->container->getService('http.response');
+		$response = \PHPPie\Core\StaticContainer::getService('http.response');
 		if(!is_null($exception->statusCode)) $response->setStatusCode($exception->statusCode);
 		
-		$view = self::$kernel->container->getService('view');
+		$view = \PHPPie\Core\StaticContainer::getService('view');
 		
 		if($view->viewExists('error'))
 		{
