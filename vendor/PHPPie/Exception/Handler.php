@@ -18,6 +18,7 @@ class Handler {
 		
         set_error_handler(array(__CLASS__, 'errorHandler'));
         set_exception_handler(array(__CLASS__, 'exceptionHandler'));
+        set_exception_handler(array(__CLASS__, 'nativeExceptionHandler'));
     }
 
 	public static function errorHandler($errno, $errstr, $errfile, $errline) {
@@ -49,5 +50,14 @@ class Handler {
 		
 		$response->send();
 		exit();
+    }
+    
+    public static function nativeExceptionHandler(\Exception $exception) {
+		$newException = new \PHPPie\Exception\Exception($exception->getMessage());
+		$newException->trace = $exception->getTraceAsString();
+		$newException->file = $exception->getFile();
+		$newException->line = $exception->getLine();
+		
+		static::exceptionHandler($newException);
     }
 }
