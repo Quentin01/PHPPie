@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'vendor/PHPPie/Autoload/Autoloader.php';
 
 $autoloader = new PHPPie\Autoload\Autoloader();
