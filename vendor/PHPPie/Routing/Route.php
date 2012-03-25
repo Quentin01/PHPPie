@@ -39,11 +39,11 @@ class Route {
     {
         $tokens = array();
         $pattern = preg_quote($this->pattern);
-        preg_match_all('#(.?)(\{([a-zA-Z0-9]+)\})#', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+        preg_match_all('#(.?)(\{([a-zA-Z0-9_]+)\})#', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
         
         foreach($matches as $match)
         {     
-            $requirement = isset($this->requirements[$match[3][0]]) ? $this->requirements[$match[3][0]] : '[a-zA-Z.-]+';
+            $requirement = isset($this->requirements[$match[3][0]]) ? $this->requirements[$match[3][0]] : '[a-zA-Z0-9]+';
             $this->tokens[] = $match[3][0];
             
             if(!isset($this->defaults[$match[3][0]]))
@@ -90,9 +90,9 @@ class Route {
         
         foreach($this->tokens as $token)
         {
-            if(isset($matches[$token]))
+            if(isset($matches[$token]) && !empty($matches[$token]))
             {
-                if(@$matches[$token][0] === '/')
+                if(substr($matches[$token], 0, 1) === '/')
                     $matches[$token] = substr($matches[$token], 1);
                 
                 $parameters[$token] = $matches[$token];
