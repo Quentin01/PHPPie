@@ -60,6 +60,11 @@ class Route {
             }
         }
         
+        if(substr($pattern, 0, 1) == "/")
+			$pattern = "/?" . substr($pattern, 1);
+		else
+			$pattern = "/?" . $pattern;  
+        
         return $pattern;
     }
     
