@@ -59,6 +59,11 @@ class Request implements \ArrayAccess{
  		return $this->server['REQUEST_URI'];
  	}
  	
+ 	public function getRedirectURI()
+ 	{
+		return $this->server['REDIRECT_URL'];
+	}
+ 	
  	public function getCompletURI()
  	{
 		if($this->server['REMOTE_PORT'] != "443")
@@ -67,7 +72,7 @@ class Request implements \ArrayAccess{
 			$uri = "https:///";
 			
 		$uri .= $this->getHost();
-		$uri .= '/' . $this->getURI();
+		$uri .= '/' . $this->getRedirectURI();
 		
 		return str_replace('//', '/', $uri);
 	}

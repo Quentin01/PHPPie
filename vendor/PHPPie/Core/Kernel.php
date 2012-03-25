@@ -33,7 +33,7 @@ class Kernel implements KernelInterface {
     public function run()
     {
         $request = $this->container->getService('http.request');        
-        $routingURI = substr($request->getURI(), strlen(dirname($request->server->offsetGet('SCRIPT_NAME'))));
+        $routingURI = substr($request->getRedirectURI(), strlen(dirname($request->server->offsetGet('SCRIPT_NAME'))));
         
         $route = $this->container->getService('router')->resolve($routingURI);
         
