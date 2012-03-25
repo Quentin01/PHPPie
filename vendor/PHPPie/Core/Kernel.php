@@ -57,11 +57,11 @@ class Kernel implements KernelInterface {
 		else
 		{
 			$parameters = $route->getParameters();
-					
-			if(!isset($parameters['_controller']))
+			
+			if(!isset($parameters['_controller']) && !isset($parameters['_view']))
 				throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$routingURI, 'PHPPie\Core\Kernel', 'run', 404);
 			
-			if(!isset($parameters['_action']))
+			if(!isset($parameters['_action']) && isset($parameters['_controller']))
 			{
 				$data = $this->findControllerAndAction($parameters['_controller']);
 				$parameters['_controller'] = $data['controller'];
@@ -69,7 +69,23 @@ class Kernel implements KernelInterface {
 			}
 			
 			$request->get->append($parameters);
-			$this->executeController($parameters['_controller'], $parameters['_action'])->send();
+			
+			if(isset($parameters['_view']))
+			{
+				$view = $parameters['_view'];
+				
+				if(isset($parameters['_controller']))
+					$view = str_replace('\\', DIRECTORY_SEPARATOR, $parameters['_controller']) . DIRECTORY_SEPARATOR . $parameters['_view'];
+					
+				$response = $this->container->getService('http.response');
+				$response->setContent($this->container->getService('view', $view)->render());
+			}
+			else
+			{
+				$response = $this->executeController($parameters['_controller'], $parameters['_action']);
+			}
+			
+			$response->send();
 		}
     }
     

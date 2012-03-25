@@ -2,3 +2,8 @@ index:
     pattern: /
     defaults:
         _controller: "Controller:index"
+        
+hello_world:
+    pattern: hello
+    defaults:
+        _view: hello
