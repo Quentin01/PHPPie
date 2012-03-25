@@ -1,3 +1,4 @@
-RewriteEngine On
-
-RewriteRule ^(.*)$ index.php [QSA,L]
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
