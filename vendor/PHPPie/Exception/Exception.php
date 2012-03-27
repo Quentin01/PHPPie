@@ -9,45 +9,19 @@ namespace PHPPie\Exception;
 
 class Exception extends \Exception{
 
-	protected $class;
-	protected $method;
 	public $statusCode;
 	public $trace = array();
 
-	/**
-	 * Constructeur d'une exception
-	 * @param string $message Le message d'erreur
-	 * @param string $class La classe où a lieu l'erreur
-	 * @param string $method La méthode où a lieu l'erreur
-	 * @return void
-	 */ 
-	public function __construct($message = null, $class = null, $method = null, $statusCode = 200)
+	public function __construct($message = null, $statusCode = 200)
 	{
 		parent::__construct($message);
-		$this->class = $class;
-		$this->method = $method;
 		$this->statusCode = $statusCode;
 		$this->trace = $this->getTraceAsString();
 	}
 
-	/**
-	 * Méthode qui met l'objet sous forme de chaîne de caractères.
-	 * Elle met en forme le message d'erreur
-	 */ 
 	public function __toString()
 	{
             $message = '<strong>Error : </strong>"<em>'.$this->message.'</em>"';
-            
-            if(!is_null($this->class))
-            {
-                $message .= ' on class <em>'.$this->class.'</em>';
-            }
-            
-            if(!is_null($this->method))
-            {
-                $message .= ' and method <em>'.$this->method.'</em>';
-            }
-            
             $message .= ' on line <strong>'.$this->line.'</strong> in <strong>'.$this->file.'</strong>.<br/><br/>';
             $message .= '<strong>Stack trace : </strong>';
             $message .= str_replace('#', '<br/>#', $this->trace) . '<br/>';

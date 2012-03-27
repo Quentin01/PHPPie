@@ -51,7 +51,7 @@ class Kernel implements KernelInterface {
 			}
 			else
 			{
-				throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$routingURI, 'PHPPie\Core\Kernel', 'run', 404);
+				throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$routingURI, 404);
 			}
 		}
 		else
@@ -59,7 +59,7 @@ class Kernel implements KernelInterface {
 			$parameters = $route->getParameters();
 			
 			if(!isset($parameters['_controller']) && !isset($parameters['_view']))
-				throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$routingURI, 'PHPPie\Core\Kernel', 'run', 404);
+				throw new \PHPPie\Exception\Exception('No controller defined for this route : '.$routingURI, 404);
 			
 			if(!isset($parameters['_action']) && isset($parameters['_controller']))
 			{
@@ -102,7 +102,7 @@ class Kernel implements KernelInterface {
 	public function executeController($controllerName, $action)
 	{
 		if(!$this->autoloader->loadClass($controllerName))
-            throw new \PHPPie\Exception\Exception('Controller '.$controllerName.' doesn\'t exists', 'PHPPie\Core\Kernel', 'run');
+            throw new \PHPPie\Exception\Exception('Controller '.$controllerName.' doesn\'t exists', 404);
             
         $reflectionClass = new \ReflectionClass($controllerName);
         $controller = $reflectionClass->newInstanceArgs(array($this));
@@ -142,7 +142,7 @@ class Kernel implements KernelInterface {
 		}
 		else
 		{
-			throw new \PHPPie\Exception\Exception('The controller '.$controllerName.' has returned a wrong value with the action '.$action.'', 'PHPPie\Core\Kernel', 'run');
+			throw new \PHPPie\Exception\Exception('The controller '.$controllerName.' has returned a wrong value with the action '.$action);
 		}
 		
 		return $response;

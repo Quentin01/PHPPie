@@ -14,7 +14,7 @@ class PHP extends File {
         
         if($this->getExtension() != 'php' && $this->getExtension() != 'php5')
         {
-            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a PHP file', 'PHPPie\File\PHP', '__construct');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a PHP file');
         }
     }
     

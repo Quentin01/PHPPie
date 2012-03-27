@@ -16,7 +16,7 @@ class Controller {
 	public function __runAction($controller, $action)
 	{
 		if(!is_callable(array($this, $action)))
-            throw new \PHPPie\Exception\Exception('Action '.$action.' doesn\'t exists in the controller '.$controller.'', 'PHPPie\MVC\Controller', '__runAction');
+            throw new \PHPPie\Exception\Exception('Action '.$action.' doesn\'t exists in the controller '.$controller);
 		
 		return $this->$action();
 	}

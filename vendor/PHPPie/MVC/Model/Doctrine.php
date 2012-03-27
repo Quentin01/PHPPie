@@ -74,7 +74,7 @@ class Doctrine {
 				$nameConnection = $this->configuration->getNameDefaultConnection();
 				
 				if($nameConnection === false)
-					throw new \PHPPie\Exception\Exception('No default connection for the entity manager : ' . $name, 'PHPPie\MVC\Model\Doctrine', 'loadEntityManagers');
+					throw new \PHPPie\Exception\Exception('No default connection for the entity manager : ' . $name,);
 			}
 			else
 			{
@@ -82,7 +82,7 @@ class Doctrine {
 			}
 			
 			if(!isset($this->connections[$nameConnection]))
-				throw new \PHPPie\Exception\Exception('Connection ' . $nameConnection . ' doesn\'t exists for the entity manager : ' . $name, 'PHPPie\MVC\Model\Doctrine', 'loadEntityManagers');
+				throw new \PHPPie\Exception\Exception('Connection ' . $nameConnection . ' doesn\'t exists for the entity manager : ' . $name);
 				
 			$this->entityManagers[$name] = \Doctrine\ORM\EntityManager::create($this->connections[$nameConnection], $this->doctrineConfiguration);
 		}
@@ -93,11 +93,11 @@ class Doctrine {
 		if(is_null($name))
 		{
 			if(($name = $this->configuration->getNameDefaultEntityManager()) === false)
-				throw new \PHPPie\Exception\Exception('No name passed to the method and no default entity manager name', 'PHPPie\MVC\Model\Doctrine', 'getEntityManager');
+				throw new \PHPPie\Exception\Exception('No name passed to the method and no default entity manager name');
 		}
 		
 		if(!isset($this->entityManagers[$name]))
-			throw new \PHPPie\Exception\Exception('The entity manager ' . $name . ' doesn\'t exists', 'PHPPie\MVC\Model\Doctrine', 'getEntityManager');
+			throw new \PHPPie\Exception\Exception('The entity manager ' . $name . ' doesn\'t exists');
 		
 		return $this->entityManagers[$name];
 	}
@@ -107,11 +107,11 @@ class Doctrine {
 		if(is_null($name))
 		{
 			if(($name = $this->configuration->getNameDefaultConnection()) === false)
-				throw new \PHPPie\Exception\Exception('No name passed to the method and no default connection name', 'PHPPie\MVC\Model\Doctrine', 'getConnection');
+				throw new \PHPPie\Exception\Exception('No name passed to the method and no default connection name');
 		}
 		
 		if(!isset($this->connections[$name]))
-			throw new \PHPPie\Exception\Exception('The connection ' . $name . ' doesn\'t exists', 'PHPPie\MVC\Model\Doctrine', 'getConnection');
+			throw new \PHPPie\Exception\Exception('The connection ' . $name . ' doesn\'t exists');
 		
 		return $this->connections[$name];
 	}

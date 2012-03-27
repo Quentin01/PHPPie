@@ -14,7 +14,7 @@ class Json extends File {
         
         if($this->getExtension() != 'json')
         {
-            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a JSON file', 'PHPPie\File\Json', '__construct');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a JSON file');
         }
     }
     

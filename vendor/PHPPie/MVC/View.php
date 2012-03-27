@@ -22,7 +22,7 @@ abstract class View {
 		
 		if(!is_null($this->pathFile) && $this->viewExists($this->pathFile) === false) 
 		{
-			throw new \PHPPie\Exception\Exception('The view '.$this->pathFile.' doesn\'t exists', 'PHPPie\MVC\View', 'setPathfile');
+			throw new \PHPPie\Exception\Exception('The view '.$this->pathFile.' doesn\'t exists');
 		}
 	}
 	

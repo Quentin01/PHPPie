@@ -110,7 +110,7 @@ class Response {
 	public function setStatusCode($status)
 	{
 		if(!isset(self::$statusTexts[$status]))
-			throw new \PHPPie\Exception\Exception('Invalid HTTP code : '.$status, 'PHPPie\HTTP\Response', 'setStatusCode');
+			throw new \PHPPie\Exception\Exception('Invalid HTTP code : '.$status);
 			
 		$this->statusCode = $status;
 		$this->statusText = self::$statusTexts[$status];

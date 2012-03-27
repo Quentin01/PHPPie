@@ -13,7 +13,7 @@ class StaticContainer {
 	public static function __callStatic($name, $parameters)
 	{
 		if(!method_exists(self::$instance, $name))
-			throw new \PHPPie\Exception\Exception('Container doesn\'t contains a method called  ' . $name, 'PHPPie\Core\StaticContainer', '__callstatic');
+			throw new \PHPPie\Exception\Exception('Container doesn\'t contains a method called  ' . $name);
 			
 		$reflectionMethod = new \ReflectionMethod(self::$instance, $name);
 		return $reflectionMethod->invokeArgs(self::$instance, $parameters);

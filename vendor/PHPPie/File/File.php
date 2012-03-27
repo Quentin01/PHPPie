@@ -17,7 +17,7 @@ abstract class File {
         $this->pathFile = realpath($pathFile);
 
         if (!$this->exists())
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', '__construct');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
 
         $this->name = basename($this->pathFile);
         $this->dir = $this->getDir($this->pathFile);
@@ -26,7 +26,7 @@ abstract class File {
     public static function create($pathFile) {
         if (!is_dir(dirname($pathFile))) {
             if (!mkdir(dirname($pathFile), 0777, true))
-                throw new \PHPPie\Exception\Exception('Permission denied to create directory : ' . dirname($pathFile), 'PHPPie\File\File', 'create');
+                throw new \PHPPie\Exception\Exception('Permission denied to create directory : ' . dirname($pathFile));
         }
 
         if (!file_exists($pathFile)) {
@@ -35,7 +35,7 @@ abstract class File {
                 $file->chmod(0777);
                 return $file;
             } else {
-                throw new \PHPPie\Exception\Exception('Permission denied to create file : ' . $pathFile, 'PHPPie\File\File', 'create');
+                throw new \PHPPie\Exception\Exception('Permission denied to create file : ' . $pathFile);
             }
         }
         else
@@ -58,7 +58,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return filesize($pathFile);
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'getSize');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function getDir($pathFile = null) {
@@ -67,7 +67,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return realpath(dirname($pathFile));
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'getDir');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function getPath() {
@@ -80,7 +80,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return basename($pathFile);
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'getName');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function getExtension($pathFile = null) {
@@ -92,7 +92,7 @@ abstract class File {
             return $extension[1];
         }
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'getExtension');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function getContents($pathFile = null) {
@@ -101,7 +101,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return file_get_contents($pathFile);
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'getContents');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function setContents($contents, $pathFile = null) {
@@ -110,7 +110,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return (file_put_contents($pathFile, $contents) !== false);
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'setContents');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function del($pathFile = null) {
@@ -120,10 +120,10 @@ abstract class File {
             if (unlink($pathFile))
                 return true;
             else
-                throw new \PHPPie\Exception\Exception('Permission denied to delete file : ' . $pathFile, 'PHPPie\File\File', 'del');
+                throw new \PHPPie\Exception\Exception('Permission denied to delete file : ' . $pathFile);
         }
         else {
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'del');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
         }
     }
 
@@ -138,7 +138,7 @@ abstract class File {
 
                 return true;
             } else {
-                throw new \PHPPie\Exception\Exception('Permission denied to rename file : ' . $this->pathFile, 'PHPPie\File\File', 'rename');
+                throw new \PHPPie\Exception\Exception('Permission denied to rename file : ' . $this->pathFile);
             }
         } elseif ($this->exists($pathFile)) {
             $name = $this->getDir($pathFile) . DIRECTORY_SEPARATOR . $name;
@@ -146,10 +146,10 @@ abstract class File {
             if (rename($pathFile, $name))
                 return true;
             else
-                throw new \PHPPie\Exception\Exception('Permission denied to rename file : ' . $pathFile, 'PHPPie\File\File', 'rename');
+                throw new \PHPPie\Exception\Exception('Permission denied to rename file : ' . $pathFile);
         }
         else {
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'rename');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
         }
     }
 
@@ -169,30 +169,30 @@ abstract class File {
                 return $this->del($pathFile);
         }
         else {
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'move');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
         }
     }
 
     public function copy($path, $pathFile = null) {
         if (!is_dir(dirname($path))) {
             if (!mkdir(dirname($path), 0777, true))
-                throw new \PHPPie\Exception\Exception('Permission denied to create directory : ' . dirname($path), 'PHPPie\File\File', 'copy');
+                throw new \PHPPie\Exception\Exception('Permission denied to create directory : ' . dirname($path));
         }
 
         if (is_null($pathFile)) {
             if (copy($this->pathFile, $path))
                 return true;
             else
-                throw new \PHPPie\Exception\Exception('Permission denied to copy file ' . $this->pathFile . ' in ' . $path, 'PHPPie\File\File', 'copy');
+                throw new \PHPPie\Exception\Exception('Permission denied to copy file ' . $this->pathFile . ' in ' . $path);
         }
         elseif ($this->exists($pathFile)) {
             if (copy($pathFile, $path))
                 return true;
             else
-                throw new \PHPPie\Exception\Exception('Permission denied to copy file ' . $pathFile . ' in ' . $path, 'PHPPie\File\File', 'copy');
+                throw new \PHPPie\Exception\Exception('Permission denied to copy file ' . $pathFile . ' in ' . $path);
         }
         else {
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'copy');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
         }
     }
 
@@ -202,16 +202,16 @@ abstract class File {
                 if (chmod($this->pathFile, $chmod))
                     return true;
                 else
-                    throw new \PHPPie\Exception\Exception('Permission denied to edit chmod\'s file ' . $this->pathFile, 'PHPPie\File\File', 'chmod');
+                    throw new \PHPPie\Exception\Exception('Permission denied to edit chmod\'s file ' . $this->pathFile);
             }
             elseif ($this->exists($pathFile)) {
                 if (chmod($pathFile, $chmod))
                     return true;
                 else
-                    throw new \PHPPie\Exception\Exception('Permission denied to edit chmod\'s file ' . $pathFile, 'PHPPie\File\File', 'chmod');
+                    throw new \PHPPie\Exception\Exception('Permission denied to edit chmod\'s file ' . $pathFile);
             }
             else {
-                throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'chmod');
+                throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
             }
         } else {
             return false;
@@ -224,7 +224,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return is_writable($pathFile);
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'isWritable');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function isReadable($pathFile = null) {
@@ -233,7 +233,7 @@ abstract class File {
         elseif ($this->exists($pathFile))
             return is_readable($pathFile);
         else
-            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists', 'PHPPie\File\File', 'isReadable');
+            throw new \PHPPie\Exception\Exception('File ' . $pathFile . ' doesn\'t exists');
     }
 
     public function __tostring() {

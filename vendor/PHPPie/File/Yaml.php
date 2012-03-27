@@ -16,7 +16,7 @@ class Yaml extends File {
         
         if($this->getExtension() != 'yml')
         {
-            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a Yaml file', 'PHPPie\File\Yaml', '__construct');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a Yaml file');
         }
     }
     

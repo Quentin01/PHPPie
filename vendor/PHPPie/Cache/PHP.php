@@ -36,7 +36,7 @@ class PHP implements CacheInterface{
 		}
 		else
 		{
-			throw new \PHPPie\Exception\Exception('Cache '.$id.' doesn\'t exists', 'PHPPie\Cache\PHP', 'del');
+			throw new \PHPPie\Exception\Exception('Cache '.$id.' doesn\'t exists');
 		}
 	}
 
@@ -89,7 +89,7 @@ class PHP implements CacheInterface{
 		}
 		else
 		{
-			throw new \PHPPie\Exception\Exception('Cache '.$id.' doesn\'t exists', 'PHPPie\Cache\PHP', 'get');
+			throw new \PHPPie\Exception\Exception('Cache '.$id.' doesn\'t exists');
 		}
 	}
 }

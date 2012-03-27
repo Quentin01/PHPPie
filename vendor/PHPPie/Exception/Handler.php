@@ -29,6 +29,8 @@ class Handler {
 		$response = \PHPPie\Core\StaticContainer::getService('http.response');
 		$response->setStatusCode($exception->statusCode);
 		
+		$message = (\PHPPie\Core\StaticContainer::getService('kernel')->debug) ? (string) $exception : "<h1>" . (($exception->statusCode !== 200) ? $exception->statusCode . " - " : "") . $response->getStatusText() . "</h1>";
+		
 		$view = \PHPPie\Core\StaticContainer::getService('view');
 		
 		if($view->viewExists('errors/' . $exception->statusCode) || $view->viewExists('error')

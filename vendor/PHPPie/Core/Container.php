@@ -125,7 +125,7 @@ class Container {
                     }
                 }
                    
-                throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
+                throw new \PHPPie\Exception\Exception('Parameter '.$key.' doesn\'t exists');
             }
         }
         else
@@ -135,7 +135,7 @@ class Container {
             if($this->hasService($key))
                 return $this->getService($key);
             else
-                throw new \PHPPie\Exception\Exception('Service '.$key.' doesn\'t exists', 'PHPPie\Core\Container', 'getParameter');
+                throw new \PHPPie\Exception\Exception('Service '.$key.' doesn\'t exists');
         }
     }
     
@@ -181,7 +181,7 @@ class Container {
         }
         else 
         {
-            throw new \PHPPie\Exception\Exception('Service '.$id.' doesn\'t exists', 'PHPPie\Core\Container', 'getService');
+            throw new \PHPPie\Exception\Exception('Service '.$id.' doesn\'t exists');
         }
     }
     
@@ -219,7 +219,7 @@ class Container {
         }
         
         if(!$this->getService('autoloader')->loadClass($service['class']))
-            throw new \PHPPie\Exception\Exception('Class '.$service['class'].' doesn\'t exists', 'PHPPie\Core\Container', 'constructService');
+            throw new \PHPPie\Exception\Exception('Class '.$service['class'].' doesn\'t exists');
         
         $reflectionClass = new \ReflectionClass($service['class']);
         return $reflectionClass->newInstanceArgs(array_merge($service['arguments'], $parameters));

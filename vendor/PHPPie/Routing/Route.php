@@ -86,7 +86,7 @@ class Route {
         $result = preg_match('#^'.$this->patternRegexp.'$#i', $uri, $matches);
         
         if($result === false)
-            throw new \PHPPie\Exception\Exception('The URI '.$uri.' aren\'t parameters with this route.', 'PHPPie\Routing\Route', 'getParameters');
+            throw new \PHPPie\Exception\Exception('The URI '.$uri.' aren\'t parameters with this route.');
         
         foreach($this->tokens as $token)
         {

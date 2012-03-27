@@ -14,7 +14,7 @@ class XML extends File {
         
         if($this->getExtension() != 'xml')
         {
-            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a XML file', 'PHPPie\File\XML', '__construct');
+            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a XML file');
         }
     }
     
@@ -23,20 +23,11 @@ class XML extends File {
         return parent::create($pathFile);
     }
 
-    /**
-     * Convertit un fichier XML en objet SimpleXML.
-     * @return object SimpleXML
-     */
     public function readData()
     {
         return simplexml_load_string($this->getContents());
     }
     
-    /**
-     * convertit un objet SimpleXMLElement en fichier XML.
-     * @param object Object SimpleXMLElement
-     * @return bool True si ça a marché ou False si ça n'a pas marché.
-     */
     public function writeData($data)
     {
         if(is_object($data))
@@ -44,11 +35,11 @@ class XML extends File {
             if(get_class($data) === "SimpleXMLElement")
                 return $this->setContents($data->asXML());
             else
-                throw new \PHPPie\Exception\Exception('Data isn\'t a SimpleXMLElement object', 'PHPPie\File\XML', 'writeData');
+                throw new \PHPPie\Exception\Exception('Data isn\'t a SimpleXMLElement object');
         }
         else
         {
-            throw new \PHPPie\Exception\Exception('Data isn\'t a object', 'PHPPie\File\XML', 'writeData');
+            throw new \PHPPie\Exception\Exception('Data isn\'t a object');
         }
     }
 }

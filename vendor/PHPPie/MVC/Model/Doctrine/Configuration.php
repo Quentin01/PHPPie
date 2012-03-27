@@ -66,7 +66,7 @@ class Configuration {
 	public function getDefaultEntityManager()
 	{
 		if(($name = $this->getNameDefaultEntityManager()) === false)
-			throw new \PHPPie\Exception\Exception('No default entity manager', 'PHPPie\MVC\Model\Doctrine\Configuration');
+			throw new \PHPPie\Exception\Exception('No default entity manager');
 			
 		return $this->getEntityManager($name);
 	}
@@ -113,7 +113,7 @@ class Configuration {
 	public function getDefaultConnection()
 	{
 		if(($name = $this->getNameDefaultConnection()) === false)
-			throw new \PHPPie\Exception\Exception('No default connection', 'PHPPie\MVC\Model\Doctrine\Configuration');
+			throw new \PHPPie\Exception\Exception('No default connection');
 			
 		return $this->getConnection($name);
 	}
