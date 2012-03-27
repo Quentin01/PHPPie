@@ -27,13 +27,17 @@ class Handler {
 		ob_get_clean();
 		
 		$response = \PHPPie\Core\StaticContainer::getService('http.response');
-		if(!is_null($exception->statusCode)) $response->setStatusCode($exception->statusCode);
+		$response->setStatusCode($exception->statusCode);
 		
 		$view = \PHPPie\Core\StaticContainer::getService('view');
 		
-		if($view->viewExists('error'))
+		if($view->viewExists('errors/' . $exception->statusCode) || $view->viewExists('error')
 		{
-			$view->setPathfile('error');
+			if($view->viewExists('errors/' . $exception->statusCode))
+				$view->setPathfile('errors/' . $exception->statusCode);
+			else
+				$view->setPathfile('error');
+				
 			$view->addVariable('message', (string) $exception);
 			$response->setContent($view->render());
 		}
