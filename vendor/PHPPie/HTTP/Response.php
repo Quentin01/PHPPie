@@ -144,6 +144,11 @@ class Response {
         return $this->statusCode;
     }
     
+    public function getStatusText()
+    {
+		return $this->statusText;
+	}
+    
     public function setCharset($charset)
     {
         $this->charset = $charset;
