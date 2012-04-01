@@ -43,9 +43,11 @@ class Kernel implements KernelInterface {
         if($route === false)
         {
 			EventHandler::fireEvent('routeNotFound', array(&$routingURI));
-			
+
 			if(($pos = strpos($routingURI, '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . substr($routingURI, $pos))))
 			{
+				EventHandler::fireEvent('assetFileFound', array(&$routingURI, &$pathfile));
+				
 				$response = $this->container->getService('http.response');
 				$finfo = new \finfo(FILEINFO_MIME);
 				
@@ -56,6 +58,7 @@ class Kernel implements KernelInterface {
 			}
 			else
 			{
+				EventHandler::fireEvent('assetFileNotFound', array(&$routingURI));
 				throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$routingURI, 404);
 			}
 		}
