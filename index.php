@@ -21,6 +21,7 @@ $autoloader->registerNamespaceFallbacks(array(
 ));
 
 $autoloader->registerDirectories(array(
+	__DIR__.'/vendor/jsxs',
 	__DIR__.'/app/controllers',
     __DIR__.'/app/models',
 ));
