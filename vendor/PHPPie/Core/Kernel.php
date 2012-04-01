@@ -6,6 +6,7 @@
  */
 
 namespace PHPPie\Core;
+use \PHPPie\Event\Handler as EventHandler;
 
 class Kernel implements KernelInterface {
     public $dev;
@@ -35,10 +36,14 @@ class Kernel implements KernelInterface {
         $request = $this->container->getService('http.request');        
         $routingURI = substr($request->getRedirectURI(), strlen(dirname($request->server->offsetGet('SCRIPT_NAME'))));
         
+        EventHandler::fireEvent('getRoutingURI', array(&$routingURI));
+        
         $route = $this->container->getService('router')->resolve($routingURI);
         
         if($route === false)
         {
+			EventHandler::fireEvent('routeNotFound', array(&$routingURI));
+			
 			if(($pos = strpos($routingURI, '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . substr($routingURI, $pos))))
 			{
 				$response = $this->container->getService('http.response');
@@ -68,6 +73,8 @@ class Kernel implements KernelInterface {
 				$parameters['_action'] = $data['action'];
 			}
 			
+			EventHandler::fireEvent('controllerAndActionDefined', array(&$parameters['_controller'], &$parameters['_action']));
+			
 			$request->get->append($parameters);
 			
 			if(isset($parameters['_view']))
@@ -76,6 +83,8 @@ class Kernel implements KernelInterface {
 				
 				if(isset($parameters['_controller']))
 					$view = str_replace('\\', DIRECTORY_SEPARATOR, $parameters['_controller']) . DIRECTORY_SEPARATOR . $parameters['_view'];
+					
+				EventHandler::fireEvent('viewDefined', array(&$view));
 					
 				$response = $this->container->getService('http.response');
 				$response->setContent($this->container->getService('view', $view)->render());
@@ -101,6 +110,8 @@ class Kernel implements KernelInterface {
 	
 	public function executeController($controllerName, $action)
 	{
+		EventHandler::fireEvent('executeController', array(&$controllerName, &$action));
+		
 		if(!$this->autoloader->loadClass($controllerName))
             throw new \PHPPie\Exception\Exception('Controller '.$controllerName.' doesn\'t exists', 404);
             
@@ -113,6 +124,8 @@ class Kernel implements KernelInterface {
         if(is_string($returnController))
 		{
 			// $returnController is the view pathfile
+			
+			EventHandler::fireEvent('viewDefined', array(&$returnController));
 			
 			$response = $this->container->getService('http.response');
 			$response->setContent($this->container->getService('view', $returnController)->render());
@@ -130,12 +143,16 @@ class Kernel implements KernelInterface {
 			if(is_null($returnController->getPathfile()))
 				$returnController->setPathfile($defaultView);
 			
+			EventHandler::fireEvent('viewClassDefined', array(&$returnController));
+			
 			$response = $this->container->getService('http.response');
 			$response->setContent($returnController->render());
 		}
 		elseif(is_null($returnController) || $returnController === false)
 		{
 			// $returnController is null, the default view is used ( {controller}/{action} )
+			
+			EventHandler::fireEvent('viewDefined', array(&$defaultView));
 			
 			$response = $this->container->getService('http.response');
 			$response->setContent($this->container->getService('view', $defaultView)->render());
@@ -145,6 +162,7 @@ class Kernel implements KernelInterface {
 			throw new \PHPPie\Exception\Exception('The controller '.$controllerName.' has returned a wrong value with the action '.$action);
 		}
 		
+		EventHandler::fireEvent('responseDefined', array(&$response));
 		return $response;
 	}
     

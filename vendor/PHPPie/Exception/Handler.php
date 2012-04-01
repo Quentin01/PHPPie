@@ -6,6 +6,7 @@
  */
 
 namespace PHPPie\Exception;
+use \PHPPie\Event\Handler as EventHandler;
 
 class Handler {
 	public static function initialize()
@@ -25,6 +26,8 @@ class Handler {
     
     public static function exceptionHandler(\PHPPie\Exception\Exception $exception) {
 		ob_get_clean();
+		
+		EventHandler::fireEvent('exceptionThrown', array(&$exception));
 		
 		$response = \PHPPie\Core\StaticContainer::getService('http.response');
 		$response->setStatusCode($exception->statusCode);
@@ -49,6 +52,8 @@ class Handler {
 		}
 		
 		$response->send();
+		\PHPPie\Core\StaticContainer::getService('autoloader')->save();
+		
 		exit();
     }
     
