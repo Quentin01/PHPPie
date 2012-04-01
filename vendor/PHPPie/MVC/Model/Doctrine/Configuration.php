@@ -11,12 +11,26 @@ class Configuration {
 	protected $mode;
 	protected $data;
 	
+	protected $idCache = 'database.cache';
+	
 	public function __construct($pathfile, $dev = false)
 	{
-		$file = new \PHPPie\File\Yaml($pathfile);
-        $this->data = $file->readData();
-        
-        $this->mode = ($dev) ? "dev" : "prod";
+		$cacheManager = \PHPPie\Core\StaticContainer::getService('cache');
+		
+		if($cacheManager->isFresh($this->idCache, $pathfile))
+		{
+			$data = $cacheManager->get($this->idCache);
+			$this->data = $data;
+		}
+		else
+		{
+			$file = new \PHPPie\File\Yaml($pathfile);
+			$this->data = $file->readData();
+			
+			$cacheManager->add($this->idCache, $this->data);
+		}
+		
+		$this->mode = ($dev) ? "dev" : "prod";
 	}
 	
 	public function getData()
