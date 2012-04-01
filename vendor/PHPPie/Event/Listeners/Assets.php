@@ -15,8 +15,19 @@ class Assets extends \PHPPie\Event\Listener{
 	
 	protected function minifyJS($contents)
 	{
+		$dirJsxs = \PHPPie\Core\StaticContainer::getService('kernel')->dirFrontController . '/vendor/jsxs/';
+		require $dirJsxs . 'Jsxs.php';
+		require $dirJsxs . 'PregFile.php';
 		
-		return $contents;
+		$jsxs = new \Jsxs();
+
+		$jsxs->setRegexDirectory($dirJsxs . 'preg');
+		$jsxs->setCompatibility(true);
+		$jsxs->setReduce(true);
+		$jsxs->setShrink(true);
+		$jsxs->setConcatString(true);
+
+		return $jsxs->exec($contents);
 	}
 	
 	protected function minifyCSS($contents)
