@@ -77,7 +77,7 @@ class Response {
 		if (!$this->hasHeader('Content-Type')) {
             $this->setHeader('Content-Type', 'text/html; charset='.$this->charset);
         } elseif ('text/' === substr($this->getHeader('Content-Type'), 0, 5) && false === strpos($this->getHeader('Content-Type'), 'charset')) {
-            $this->setHeader('Content-Type', $this->getHeader('Content-Type').'; charset='.$$this->charset);
+            $this->setHeader('Content-Type', $this->getHeader('Content-Type').'; charset='.$this->charset);
         }
         
         if ($this->hasHeader('Transfer-Encoding')) {
