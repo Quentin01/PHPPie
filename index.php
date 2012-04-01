@@ -31,7 +31,9 @@ $cacheManager = new PHPPie\Cache\PHP(__DIR__.DIRECTORY_SEPARATOR.'app'.DIRECTORY
 $autoloader->enableCache($cacheManager);
 
 $kernel = new PHPPie\Core\Kernel(__DIR__, $autoloader, $cacheManager, true);
-$kernel->run();
 
+\PHPPie\Event\Handler::attach(new \PHPPie\Event\Listeners\Assets());
+
+$kernel->run();
 $autoloader->save();
 ?>
