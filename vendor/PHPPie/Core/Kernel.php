@@ -52,7 +52,9 @@ class Kernel implements KernelInterface {
 				$finfo = new \finfo(FILEINFO_MIME);
 				
 				$response->setContent(file_get_contents($pathfile));
-				$response->setHeader('Content-Type', $finfo->file($pathfile));
+				
+				if(!$response->hasHeader('Content-Type'))
+					$response->setHeader('Content-Type', $finfo->file($pathfile));
 				
 				$response->send();
 			}
