@@ -33,7 +33,7 @@ class Handler {
 		
 		$view = \PHPPie\Core\StaticContainer::getService('view');
 		
-		if($view->viewExists('errors/' . $exception->statusCode) || $view->viewExists('error')
+		if($view->viewExists('errors/' . $exception->statusCode) || $view->viewExists('error'))
 		{
 			if($view->viewExists('errors/' . $exception->statusCode))
 				$view->setPathfile('errors/' . $exception->statusCode);

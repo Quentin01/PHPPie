@@ -74,7 +74,7 @@ class Doctrine {
 				$nameConnection = $this->configuration->getNameDefaultConnection();
 				
 				if($nameConnection === false)
-					throw new \PHPPie\Exception\Exception('No default connection for the entity manager : ' . $name,);
+					throw new \PHPPie\Exception\Exception('No default connection for the entity manager : ' . $name);
 			}
 			else
 			{
