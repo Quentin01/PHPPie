@@ -9,17 +9,19 @@ namespace PHPPie\HTTP;
 
 class Request implements \ArrayAccess{
  	
-	protected $get    = array();
-	protected $post   = array();
-	protected $files  = array();
-	protected $server = array();
+	protected $get     = array();
+	protected $post    = array();
+	protected $files   = array();
+	protected $server  = array();
+	protected $cookies = array();
 
  	public function __construct()
  	{	
-		$this->get    = new Request\Get($_GET);
-		$this->post   = new Request\Post($_POST);
-		$this->files  = new Request\Files($_FILES);	
-		$this->server = new Request\Server($_SERVER);
+		$this->get     = new Request\Get($_GET);
+		$this->post    = new Request\Post($_POST);
+		$this->files   = new Request\Files($_FILES);	
+		$this->server  = new Request\Server($_SERVER);
+		$this->cookies = new Request\Cookies($_COOKIE);
  	}
  	
  	public function __get($name)
@@ -36,7 +38,7 @@ class Request implements \ArrayAccess{
 	
 	public function offsetExists($name)
 	{
-		return (in_array($name, array('get', 'post', 'files', 'server')));
+		return (in_array($name, array('get', 'post', 'files', 'server', 'cookies')));
 	}
 	
 	public function offsetSet($name, $value)

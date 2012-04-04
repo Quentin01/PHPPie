@@ -15,6 +15,8 @@ class Response {
 	protected $charset;
 	protected $version;
 	
+	protected $cookies;
+	
 	static public $statusTexts = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -66,6 +68,14 @@ class Response {
 		$this->headers = $headers;
 		$this->setCharset("UTF-8");
 		$this->setProtocolVersion("1.0");
+		
+		$this->cookies = new \PHPPie\HTTP\Response\Cookies();
+	}
+	
+	public function __get($name)
+ 	{
+		if($name === "cookies")
+			return $this->cookies;
 	}
 	
 	public function send()
@@ -89,6 +99,8 @@ class Response {
 		foreach ($this->headers as $name => $value) {
 			header($name.': '.$value, false);
         }
+        
+        $this->cookies->send();
         
         echo $this->content;
         
