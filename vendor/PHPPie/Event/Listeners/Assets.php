@@ -168,8 +168,6 @@ class Assets extends \PHPPie\Event\Listener{
 		$response->setContent(file_get_contents($pathCacheFile));
 		$response->send();
 		
-		$routingURI = false;
-		
 		return true;
 	}
 	

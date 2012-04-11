@@ -60,9 +60,7 @@ class Kernel implements KernelInterface {
 			}
 			else
 			{
-				EventHandler::fireEvent('assetFileNotFound', array(&$routingURI));
-				
-				if($routingURI !== false)
+				if(!EventHandler::fireEvent('assetFileNotFound', array(&$routingURI)))
 					throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$routingURI, 404);
 			}
 		}

@@ -22,7 +22,9 @@ class Handler {
 		foreach(self::$eventListeners as $eventListener)
 		{
 			if($eventListener->event($name, $parameters))
-				return;
+				return true;
 		}
+		
+		return false;
 	}
 }
