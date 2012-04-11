@@ -35,6 +35,8 @@ class Container {
 			
 			$this->parameters = $data['parameters'];
 			$this->services = $data['services'];
+			
+			$file = new \PHPPie\File\PHP($cacheManager->getPath($this->idCache));
 		}
 		else
 		{
@@ -165,6 +167,7 @@ class Container {
 		array_shift($parameters);
 		
         $id = trim($id);
+        
         if($this->hasService($id))
         {
             if($this->services[$id]['shared'])

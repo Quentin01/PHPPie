@@ -19,7 +19,7 @@ class PHP implements CacheInterface{
 
 	public function add($id, $data)
 	{
-		return PHPFile::create($this->getPath($id))->writeData($data);
+		return PHPFile::create($this->getPath($id), $data);
 	}
         
     public function getPath($id)
@@ -29,9 +29,10 @@ class PHP implements CacheInterface{
 
 	public function del($id)
 	{
-		if($this->exists($id))
+		$cache = new PHPFile($this->getPath($id));
+		
+		if($cache->exists())
 		{
-			$cache = new PHPFile($this->getPath($id));
 			return $cache->del();
 		}
 		else
@@ -42,20 +43,20 @@ class PHP implements CacheInterface{
 
 	public function isFresh($id, $timeLastUpdateData, $maxTime = 0)
 	{
-		if($this->exists($id))
+		$cache = new PHPFile($this->getPath($id));
+		
+		if($cache->exists($id))
 		{
 			if (is_string($timeLastUpdateData))
 			{
 				$timeLastUpdateData = filemtime($timeLastUpdateData);
 			}
 
-			$timeLastUpdateCache = filemtime($this->getPath($id));
-			
-			if ($timeLastUpdateCache < $timeLastUpdateData)
+			if ($cache->time < $timeLastUpdateData)
 			{
                 return false;
 			}
-            elseif($maxTime != 0 && time() > ($timeLastUpdateCache + $maxTime))
+            elseif($maxTime != 0 && time() > ($cache->time + $maxTime))
             {
 				return false;
             }
@@ -68,23 +69,16 @@ class PHP implements CacheInterface{
 	
 	public function exists($id)
 	{
-		try
-		{
-			$cache = new PHPFile($this->getPath($id));
-		}
-		catch(\Exception $e)
-		{
-			return false;
-		}
-		
-		return true;
+		$cache = new PHPFile($this->getPath($id));
+		return $cache->exists();
 	}
 
 	public function get($id)
 	{
-		if($this->exists($id))
+		$cache = new PHPFile($this->getPath($id));
+		
+		if($cache->exists($id))
 		{
-			$cache = new PHPFile($this->getPath($id));
 			return $cache->readData();
 		}
 		else

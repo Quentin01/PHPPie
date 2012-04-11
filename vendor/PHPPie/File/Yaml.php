@@ -10,19 +10,14 @@ use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
 
 class Yaml extends File {
-    public function __construct($pathFile)
+    public function __construct($path, $create = false)
     {
-        parent::__construct($pathFile);
+        parent::__construct($path, $create);
         
         if($this->getExtension() != 'yml')
         {
-            throw new \PHPPie\Exception\Exception('File '.$this->pathFile.' isn\'t a Yaml file');
+            throw new \PHPPie\Exception\Exception('File '.$this->path.' isn\'t a Yaml file');
         }
-    }
-    
-    public static function create($pathFile)
-    {
-        return parent::create($pathFile);
     }
     
     public function readData()
