@@ -113,7 +113,7 @@ class Assets extends \PHPPie\Event\Listener{
 	{
 		if(($pos = strpos($routingURI, '/web/')) === false)
 		{
-			return;
+			return false;
 		}
 		
 		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
@@ -131,11 +131,11 @@ class Assets extends \PHPPie\Event\Listener{
 		{
 			if(!file_exists($files[$key] = $kernel->dirFrontController . $dir . DIRECTORY_SEPARATOR . $file))
 			{
-				return;
+				return false;
 			}
 			elseif(substr(strrchr($files[$key], '.'), 1) != $extension)
 			{
-				return;
+				return false;
 			}
 			else
 			{
@@ -147,7 +147,7 @@ class Assets extends \PHPPie\Event\Listener{
 		}
 		
 		if($this->checkExtension($extension) === false)
-				return;
+				return false;
 		
 		$pathCacheFile = $this->getPathCache($routingURI, $extension);
 		
@@ -169,6 +169,8 @@ class Assets extends \PHPPie\Event\Listener{
 		$response->send();
 		
 		$routingURI = false;
+		
+		return true;
 	}
 	
 	public function onAssetFileFound(&$routingURI, &$pathFile)
@@ -176,7 +178,7 @@ class Assets extends \PHPPie\Event\Listener{
 		$extension = substr(strrchr(basename($pathFile), '.'), 1);
 		
 		if($this->checkExtension($extension) === false)
-				return;
+				return false;
 		
 		$pathCacheFile = $this->getPathCache($routingURI, $extension);
 		
@@ -187,5 +189,7 @@ class Assets extends \PHPPie\Event\Listener{
 		
 		$this->sendHeaders($pathCacheFile);
 		$pathFile = $pathCacheFile;
+		
+		return true;
 	}
 }

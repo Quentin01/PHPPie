@@ -16,28 +16,21 @@ class Listener {
 		$methodName = 'on' . ucFirst($name);
 		
 		if(isset($eventsInUse[$name]) && $eventsInUse[$name] === true)
-			return;
+			return false;
 		
-		if(method_exists($this, $methodName))
-		{
-			$eventsInUse[$name] = true;
+		if(!method_exists($this, $methodName) && isset($this->events[$name]))
+			$methodName = $this->events[$name];
+		
+		if(!method_exists($this, $methodName))
+			return false;
 			
-			$reflectionMethod = new \ReflectionMethod($this, $methodName);
-			$reflectionMethod->invokeArgs($this, $parameters);
+		$eventsInUse[$name] = true;
 			
-			$eventsInUse[$name] = false;
-		}
-		else
-		{
-			if(isset($this->events[$name]))
-			{
-				$eventsInUse[$name] = true;
-				
-				$reflectionMethod = new \ReflectionMethod($this, $this->events[$name]);
-				$reflectionMethod->invokeArgs($this, $parameters);
-				
-				$eventsInUse[$name] = false;
-			}
-		}
+		$reflectionMethod = new \ReflectionMethod($this, $methodName);
+		$return = $reflectionMethod->invokeArgs($this, $parameters);
+			
+		$eventsInUse[$name] = false;
+		
+		return $return;
 	}
 }

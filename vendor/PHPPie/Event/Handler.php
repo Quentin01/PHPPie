@@ -21,7 +21,8 @@ class Handler {
 	{
 		foreach(self::$eventListeners as $eventListener)
 		{
-			$eventListener->event($name, $parameters);
+			if($eventListener->event($name, $parameters))
+				return;
 		}
 	}
 }
