@@ -8,9 +8,13 @@
 namespace PHPPie\Event\Listeners;
 
 class Assets extends \PHPPie\Event\Listener{
-	public function __construct()
+	protected $minify = true;
+	protected $encode = true;
+	
+	public function __construct($minify = true, $encode = true)
 	{
-		
+		$this->minify = $minify;
+		$this->encode = $endode;
 	}
 	
 	protected function minifyJS($contents)
@@ -41,6 +45,9 @@ class Assets extends \PHPPie\Event\Listener{
 		$contents = file_get_contents($pathFile);
 		$methodName = "minify" . strtoupper($extension);
 		
+		if(!$this->minify)
+			return $contents;
+		
 		$contents = $this->$methodName($contents);
 				
 		return $contents;
@@ -58,6 +65,9 @@ class Assets extends \PHPPie\Event\Listener{
 	
 	protected function getEncodingSupported()
 	{
+		if(!$this->encode)
+			return "none";
+			
 		$server = \PHPPie\Core\StaticContainer::getService('http.request')->server;
 		
 		$gzip = strstr($server['HTTP_ACCEPT_ENCODING'], 'gzip');
@@ -106,7 +116,7 @@ class Assets extends \PHPPie\Event\Listener{
 		$encoding = $this->getEncodingSupported();
 		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
 		
-		return $kernel->getPathCache() . DIRECTORY_SEPARATOR . md5($routingURI) . (($encoding !== "none") ? '-' . $encoding : "") . '.' . $extension;
+		return $kernel->getPathCache() . DIRECTORY_SEPARATOR . (($this->minify) ? 'min-' : '') . md5($routingURI) . (($encoding !== "none") ? '-' . $encoding : "") . '.' . $extension;
 	}
 	
 	public function onAssetFileNotFound(&$routingURI)
