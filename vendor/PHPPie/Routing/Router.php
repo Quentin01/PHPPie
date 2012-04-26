@@ -9,11 +9,16 @@ namespace PHPPie\Routing;
 
 class Router implements RouterInterface {
     protected $routes  = array();
+    protected $urls = array();
+    
     protected $idCache = 'router.cache';
+    protected $idCacheURL = 'url.cache';
     
     public function __construct()
     {
-        if(\PHPPie\Core\StaticContainer::getService('cache')->isFresh($this->idCache, \PHPPie\Core\StaticContainer::getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml'))
+		$routingFile = \PHPPie\Core\StaticContainer::getService('kernel')->getPathConfig().DIRECTORY_SEPARATOR.'routing.yml';
+		
+        if(\PHPPie\Core\StaticContainer::getService('cache')->isFresh($this->idCache, $routingFile))
 		{
 			$data = \PHPPie\Core\StaticContainer::getService('cache')->get($this->idCache);
 			
@@ -39,6 +44,11 @@ class Router implements RouterInterface {
 			}
 			
 			\PHPPie\Core\StaticContainer::getService('cache')->add($this->idCache, $data);
+		}
+		
+		if(\PHPPie\Core\StaticContainer::getService('cache')->isFresh($this->idCacheURL, $routingFile))
+		{
+			$this->urls = \PHPPie\Core\StaticContainer::getService('cache')->get($this->idCacheURL);
 		}
     }
     
@@ -68,11 +78,23 @@ class Router implements RouterInterface {
     
     public function resolve($uri)
     {
+		if(isset($this->urls[$uri]))
+		{
+			$route = $this->routes[$this->urls[$uri]];
+			$route->setDefaultURI($uri);
+			
+			return $route;
+		}
+		
         foreach($this->routes as $name => $route)
         {
             if($route->check($uri))
             {
                 $route->setDefaultURI($uri);
+                
+                $this->urls[$uri] = $name;
+                \PHPPie\Core\StaticContainer::getService('cache')->add($this->idCacheURL, $this->urls);
+                
                 return $route;
             }
         }
