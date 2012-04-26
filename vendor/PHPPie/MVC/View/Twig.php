@@ -43,8 +43,7 @@ class Twig extends \PHPPie\MVC\View {
 	public function render()
 	{
 		try {
-			$template = self::$environment->loadTemplate($this->pathFile . $this->getExtensionFile());
-			return $template->render($this->variables); 
+			return self::$environment->loadTemplate($this->pathFile . $this->getExtensionFile())->render($this->variables); 
 		}
 		catch(\Twig_Error $e) {
 			static::exceptionHandler($e);
@@ -58,7 +57,7 @@ class Twig extends \PHPPie\MVC\View {
 		$exception->file = $e->getFile();
 		$exception->line = $e->getLine();
 		
-		throw \PHPPie\Exception\Handler::exceptionHandler($exception);
+		\PHPPie\Exception\Handler::exceptionHandler($exception);
 	}
 	
 	public static function getEnvironnement()

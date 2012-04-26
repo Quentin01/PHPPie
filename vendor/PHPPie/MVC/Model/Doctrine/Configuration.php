@@ -19,8 +19,7 @@ class Configuration {
 		
 		if($cacheManager->isFresh($this->idCache, $pathfile))
 		{
-			$data = $cacheManager->get($this->idCache);
-			$this->data = $data;
+			$this->data = $cacheManager->get($this->idCache);
 		}
 		else
 		{
@@ -39,26 +38,11 @@ class Configuration {
 	}
 	
 	public function getEntityManagers()
-	{
-		$data = array();
-		
-		if(isset($this->data[$this->mode]['orm']['entity_managers']))
-		{
-			foreach($this->data[$this->mode]['orm']['entity_managers'] as $name => $entityManager)
-			{
-				$data[$name] = $entityManager;
-			}
-		}
-		
-		if(isset($this->data['orm']['entity_managers']))
-		{
-			foreach($this->data['orm']['entity_managers'] as $name => $entityManager)
-			{
-				$data[$name] = $entityManager;
-			}
-		}
-		
-		return $data;
+	{	
+		return array_merge(
+			((isset($this->data[$this->mode]['orm']['entity_managers'])) ? $this->data[$this->mode]['orm']['entity_managers'] : array()),
+			((isset($this->data['orm']['entity_managers'])) ? $this->data['orm']['entity_managers'] : array())
+		);
 	}
 	
 	public function getEntityManager($name)
@@ -87,25 +71,10 @@ class Configuration {
 	
 	public function getConnections()
 	{
-		$data = array();
-		
-		if(isset($this->data[$this->mode]['connections']))
-		{
-			foreach($this->data[$this->mode]['connections'] as $name => $connection)
-			{
-				$data[$name] = $connection;
-			}
-		}
-		
-		if(isset($this->data['connections']))
-		{
-			foreach($this->data['connections'] as $name => $connection)
-			{
-				$data[$name] = $connection;
-			}
-		}
-		
-		return $data;
+		return array_merge(
+			((isset($this->data[$this->mode]['orm']['connections'])) ? $this->data[$this->mode]['orm']['connections'] : array()),
+			((isset($this->data['orm']['connections'])) ? $this->data['orm']['connections'] : array())
+		);
 	}
 	
 	public function getConnection($name)

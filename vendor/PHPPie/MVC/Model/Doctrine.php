@@ -68,7 +68,6 @@ class Doctrine {
 	{
 		foreach($this->configuration->getEntityManagers() as $name => $data)
 		{
-			$nameConnection = "";
 			if(!isset($data['connection']))
 			{
 				$nameConnection = $this->configuration->getNameDefaultConnection();

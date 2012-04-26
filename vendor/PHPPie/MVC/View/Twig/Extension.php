@@ -46,8 +46,7 @@ class Extension extends \Twig_Extension {
 		$kernel = \PHPPie\Core\StaticContainer::getService('kernel');
 		
 		$data = $kernel->findControllerAndAction($string);
-		$response = $kernel->executeController($data['controller'], $data['action']);
-		return $response->getContent();
+		return $kernel->executeController($data['controller'], $data['action'])->getContent();
 	}
 	
 	public function functionLink($name, $slugs = array())
