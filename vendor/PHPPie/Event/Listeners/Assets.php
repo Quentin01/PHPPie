@@ -14,7 +14,7 @@ class Assets extends \PHPPie\Event\Listener{
 	public function __construct($minify = true, $encode = true)
 	{
 		$this->minify = $minify;
-		$this->encode = $endode;
+		$this->encode = $encode;
 	}
 	
 	protected function minifyJS($contents)

@@ -72,8 +72,8 @@ class Configuration {
 	public function getConnections()
 	{
 		return array_merge(
-			((isset($this->data[$this->mode]['orm']['connections'])) ? $this->data[$this->mode]['orm']['connections'] : array()),
-			((isset($this->data['orm']['connections'])) ? $this->data['orm']['connections'] : array())
+			((isset($this->data[$this->mode]['connections'])) ? $this->data[$this->mode]['connections'] : array()),
+			((isset($this->data['connections'])) ? $this->data['connections'] : array())
 		);
 	}
 	
