@@ -4,6 +4,9 @@ index:
         _controller: "Controller:index"
         
 hello_world:
-    pattern: hello
+    pattern: hello-{nom}
+    requirements:
+        nom: "[a-zA-Z]+"
     defaults:
         _view: hello
+        nom: world
