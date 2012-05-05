@@ -57,7 +57,13 @@ class Handler {
 		exit();
     }
     
-    public static function nativeExceptionHandler(\Exception $exception) {
+    public static function nativeExceptionHandler(\PHPPie\Exception\Exception $exception) {
+		if($exception instanceof $exception)
+		{
+			static::exceptionHandler($exception);
+			return;
+		}
+		
 		$newException = new \PHPPie\Exception\Exception($exception->getMessage());
 		$newException->trace = $exception->getTraceAsString();
 		$newException->file = $exception->getFile();
