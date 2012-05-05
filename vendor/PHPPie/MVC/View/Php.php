@@ -26,8 +26,11 @@ class Php extends \PHPPie\MVC\View {
 		
 		if(is_null($this->layout))
 			return $contents;
-			
+		
 		$layout = new self($this->layout);
+		
+		if(!$layout->viewExists())
+			return $contents;
 		
 		ob_start();
 		include $layout->getRealPathfile();
