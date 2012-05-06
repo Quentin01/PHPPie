@@ -115,7 +115,8 @@ class Route {
     
     public function getURI($slugs = array())
     {
-		$uri =  \PHPPie\Core\StaticContainer::getService('http.request')->getCompletURI() . $this->pattern;
+		$request = \PHPPie\Core\StaticContainer::getService('http.request');
+		$uri = substr($request->getURI(), 0, strlen(dirname($request->server->offsetGet('SCRIPT_NAME')))) . '/' . $this->pattern;
 		preg_match_all('#\{([a-zA-Z0-9]+)\}#', $uri, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 		
 		foreach($matches as $match)
