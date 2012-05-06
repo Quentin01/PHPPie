@@ -44,7 +44,7 @@ class Kernel implements KernelInterface {
         {
 			EventHandler::fireEvent('routeNotFound', array(&$routingURI));
 
-			if(($pos = strpos($routingURI, '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . substr($routingURI, $pos))))
+			if(($pos = strpos($routingURI, '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . '/' . substr($routingURI, $pos))))
 			{
 				EventHandler::fireEvent('assetFileFound', array(&$routingURI, &$pathfile));
 				
