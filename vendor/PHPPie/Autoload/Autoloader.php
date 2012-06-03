@@ -148,6 +148,18 @@ class Autoloader {
             if (file_exists($file)) {
 				return $file;
 			}
+			
+			$file = $dir . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+			
+			if (file_exists($file)) {
+				return $file;
+			}
+			
+			$file = $dir . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+			
+			if (file_exists($file)) {
+				return $file;
+			}
 		}
         
         return false;

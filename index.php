@@ -24,6 +24,7 @@ $autoloader->registerDirectories(array(
 	__DIR__.'/vendor/jsxs',
 	__DIR__.'/app/controllers',
     __DIR__.'/app/models',
+    __DIR__.'/app/helpers',
 ));
 
 $autoloader->register();
