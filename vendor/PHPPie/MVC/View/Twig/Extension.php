@@ -18,6 +18,7 @@ class Extension extends \Twig_Extension {
         return array(
             'render' => new \Twig_Function_Method($this, 'functionRender', array('is_safe' => array('html'))),
             'link' => new \Twig_Function_Method($this, 'functionLink'),
+            'convertOctet' => new \Twig_Function_Method($this, 'convertOctet', array('is_safe' => array('html'))),
         );
     }
     
@@ -33,6 +34,11 @@ class Extension extends \Twig_Extension {
 				'request' => $kernel->container->getService('http.request'),
 				'response' => $kernel->container->getService('http.response')
 			),
+			'global' => array(
+				'get' => $kernel->container->getService('http.request')->get,
+				'post' => $kernel->container->getService('http.request')->post,
+				'session' => $kernel->container->getService('http.request')->session
+			)
         );
     }
 	
@@ -52,5 +58,24 @@ class Extension extends \Twig_Extension {
 	public function functionLink($name, $slugs = array())
 	{
 		return \PHPPie\Core\StaticContainer::getService('kernel')->container->getService('router')->getURI($name, $slugs);
+	}
+	
+	public function convertOctet($bytes) {
+		$bytes = (double)$bytes;
+		$units = array(
+			'o',
+			'Ko',
+			'Mo',
+			'Go',
+			'To'
+		);	
+		
+		$e = (int)(log($bytes,1024));
+		
+		if(isset($units[$e]) === false)
+			$e = 4;
+			
+		$bytes = $bytes/pow(1024,$e);
+		return round($bytes, 1) . ' ' . $units[$e];
 	}
 }

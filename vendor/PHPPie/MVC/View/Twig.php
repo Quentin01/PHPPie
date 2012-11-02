@@ -50,12 +50,16 @@ class Twig extends \PHPPie\MVC\View {
 		}
 	}
 	
-	public static function exceptionHandler(\Twig_Error $e)
+	public static function exceptionHandler($e)
 	{
-		$exception = new \PHPPie\Exception\Exception((string) $e->getRawMessage());
-		$exception->trace = $e->getTraceAsString();
-		$exception->file = $e->getFile();
-		$exception->line = $e->getLine();
+		if($e instanceof \Twig_Error) {	
+			$exception = new \PHPPie\Exception\Exception((string) $e->getRawMessage());
+			$exception->trace = $e->getTraceAsString();
+			$exception->file = $e->getFile();
+			$exception->line = $e->getLine();
+		} else {
+			$exception = $e;
+		}
 		
 		\PHPPie\Exception\Handler::exceptionHandler($exception);
 	}

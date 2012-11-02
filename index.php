@@ -23,8 +23,8 @@ $autoloader->registerNamespaceFallbacks(array(
 $autoloader->registerDirectories(array(
 	__DIR__.'/vendor/jsxs',
 	__DIR__.'/app/controllers',
+	__DIR__.'/vendor/PHPPie/MVC/DefaultControllers',
     __DIR__.'/app/models',
-    __DIR__.'/app/helpers',
 ));
 
 $autoloader->register();
@@ -35,6 +35,14 @@ $autoloader->enableCache($cacheManager);
 $kernel = new PHPPie\Core\Kernel(__DIR__, $autoloader, $cacheManager, true);
 
 \PHPPie\Event\Handler::attach(new \PHPPie\Event\Listeners\Assets());
+
+$firewall = new \PHPPie\Event\Listeners\Firewall();
+
+/*$firewall->setRoute('hello*', function() { return true; }, array(
+	'controller' => function() { return (!isset($_SESSION['id'])) ? 'Controller:test' : 'Controller:index'; },
+));*/
+
+\PHPPie\Event\Handler::attach($firewall);
 
 $kernel->run();
 $autoloader->save();

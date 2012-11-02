@@ -24,7 +24,7 @@ class Router implements RouterInterface {
 			
 			foreach($data as $name => $routeData)
             {
-				$this->routes[$name] = new Route($this, $routeData['pattern'], $routeData['defaults'], $routeData['requirements'], $routeData['patternRegexp'], $routeData['tokens']);
+				$this->routes[$name] = new Route($this, $routeData['name'], $routeData['pattern'], $routeData['defaults'], $routeData['requirements'], $routeData['patternRegexp'], $routeData['tokens']);
 			}
 		}
 		else
@@ -35,6 +35,7 @@ class Router implements RouterInterface {
 			foreach($this->routes as $name => $route)
             {
 				$data[$name] = array(
+					'name' => $name,
 					'pattern' => $route->pattern,
 					'defaults' => $route->defaults,
 					'requirements' => $route->requirements,
@@ -71,7 +72,7 @@ class Router implements RouterInterface {
                     $data['defaults'] = array();
                 }
 
-                $this->routes[$name] = new Route($this, $data['pattern'], $data['defaults'], $data['requirements']);
+                $this->routes[$name] = new Route($this, $name, $data['pattern'], $data['defaults'], $data['requirements']);
             }
         }
     }

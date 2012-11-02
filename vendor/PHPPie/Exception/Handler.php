@@ -13,7 +13,6 @@ class Handler {
 	{	
         set_error_handler(array(__CLASS__, 'errorHandler'));
         set_exception_handler(array(__CLASS__, 'exceptionHandler'));
-        set_exception_handler(array(__CLASS__, 'nativeExceptionHandler'));
     }
 
 	public static function errorHandler($errno, $errstr, $errfile, $errline) {
@@ -24,7 +23,16 @@ class Handler {
 		static::exceptionHandler($exception);
     }
     
-    public static function exceptionHandler(\PHPPie\Exception\Exception $exception) {
+    public static function exceptionHandler($e) {
+    	if($e instanceof \PHPPie\Exception\Exception) {
+			$exception = $e;
+		} else {
+			$exception = new \PHPPie\Exception\Exception($e->getMessage());
+			$exception->trace = $exception->getTraceAsString();
+			$exception->file = $exception->getFile();
+			$exception->line = $exception->getLine();
+		}
+    
 		ob_get_clean();
 		
 		EventHandler::fireEvent('exceptionThrown', array(&$exception));
@@ -55,20 +63,5 @@ class Handler {
 		\PHPPie\Core\StaticContainer::getService('autoloader')->save();
 		
 		exit();
-    }
-    
-    public static function nativeExceptionHandler(\PHPPie\Exception\Exception $exception) {
-		if($exception instanceof $exception)
-		{
-			static::exceptionHandler($exception);
-			return;
-		}
-		
-		$newException = new \PHPPie\Exception\Exception($exception->getMessage());
-		$newException->trace = $exception->getTraceAsString();
-		$newException->file = $exception->getFile();
-		$newException->line = $exception->getLine();
-		
-		static::exceptionHandler($newException);
     }
 }

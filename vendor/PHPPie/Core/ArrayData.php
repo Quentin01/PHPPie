@@ -63,6 +63,10 @@ class ArrayData extends \ArrayIterator{
 	
 	public function offsetGet($key)
 	{
+		if(!isset($this->data[$key])) {
+			trigger_error ('The key ' . $key . ' doesn\'t exists', E_USER_ERROR);;
+		}
+		
 		return $this->data[$key];
 	}
 	

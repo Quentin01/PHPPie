@@ -70,10 +70,14 @@ class Assets extends \PHPPie\Event\Listener{
 			
 		$server = \PHPPie\Core\StaticContainer::getService('http.request')->server;
 		
-		$gzip = strstr($server['HTTP_ACCEPT_ENCODING'], 'gzip');
-		$deflate = strstr($server['HTTP_ACCEPT_ENCODING'], 'deflate');
+		if(isset($server['HTTP_ACCEPT_ENCODING'])) {
+			$gzip = strstr($server['HTTP_ACCEPT_ENCODING'], 'gzip');
+			$deflate = strstr($server['HTTP_ACCEPT_ENCODING'], 'deflate');
 	
-		$encoding = $gzip ? 'gzip' : ($deflate ? 'deflate' : 'none');
+			$encoding = $gzip ? 'gzip' : ($deflate ? 'deflate' : 'none');
+		} else {
+			$encoding = 'none';
+		}
 		
 		if (!strstr($server['HTTP_USER_AGENT'], 'Opera') && preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $server['HTTP_USER_AGENT'], $matches)) {
 			$version = floatval($matches[1]);

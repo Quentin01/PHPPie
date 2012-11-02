@@ -32,12 +32,18 @@ class Request implements \ArrayAccess{
 	
 	public function offsetGet($name)
 	{
+		if($name == "session" && isset($_SESSION))
+			return $_SESSION;
+			
 		if($this->offsetExists($name))
 			return $this->$name;
 	}
 	
 	public function offsetExists($name)
 	{
+		if($name == "session" && isset($_SESSION))
+			return true;
+			
 		return (in_array($name, array('get', 'post', 'files', 'server', 'cookies')));
 	}
 	
@@ -66,7 +72,7 @@ class Request implements \ArrayAccess{
 		return $this->server['REDIRECT_URL'];
 	}
  	
- 	public function getCompletURI()
+ 	public function getCompletURI($page = true)
  	{
 		if($this->server['REMOTE_PORT'] != "443")
 			$uri = "http:///";
@@ -74,7 +80,12 @@ class Request implements \ArrayAccess{
 			$uri = "https:///";
 			
 		$uri .= $this->getHost();
-		$uri .= '/' . $this->getRedirectURI();
+		
+		if($uri[strlen($uri) - 1] !== '/')
+			$uri .= '/';
+		
+		if($page)
+			$uri .= $this->getRedirectURI();
 		
 		return str_replace('//', '/', $uri);
 	}

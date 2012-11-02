@@ -9,6 +9,7 @@ namespace PHPPie\Routing;
 
 class Route {
 	public $router;
+	public $name;
     public $pattern;
     public $defaults;
     public $requirements;
@@ -17,9 +18,10 @@ class Route {
     public $tokens        = array();
     protected $defaultURI = null;
     
-    public function __construct(\PHPPie\Routing\Router $router, $pattern, array $defaults, array $requirements = array(), $patternRegexp = null, $tokens = null)
+    public function __construct(\PHPPie\Routing\Router $router, $name, $pattern, array $defaults, array $requirements = array(), $patternRegexp = null, $tokens = null)
     {
 		$this->router = $router;
+		$this->name = $name;
         $this->pattern = $pattern;
         $this->defaults = $defaults;
         $this->requirements = $requirements;
@@ -116,7 +118,17 @@ class Route {
     public function getURI($slugs = array())
     {
 		$request = \PHPPie\Core\StaticContainer::getService('http.request');
-		$uri = substr($request->getURI(), 0, strlen(dirname($request->server->offsetGet('SCRIPT_NAME')))) . '/' . $this->pattern;
+		
+		$uri = $request->getCompletURI(false);
+		
+		$middle = substr($request->getURI(), 0, strlen(dirname($request->server->offsetGet('SCRIPT_NAME'))));
+		
+		if($middle !== '/')
+			$uri .= $middle;
+		if($uri[strlen($uri) - 1] !== '/')
+			$uri .= '/';
+
+		$uri .= (($this->pattern[0] !== "/") ? $this->pattern : substr($this->pattern, 1));
 		preg_match_all('#\{([a-zA-Z0-9]+)\}#', $uri, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 		
 		foreach($matches as $match)

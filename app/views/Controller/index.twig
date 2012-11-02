@@ -1,9 +1,19 @@
-Votre nom est : {{ name }}
+<!--<form method="POST" action="">
+{% for field in form.getFields %}
+	{{ field.display()|raw }}<br/>
+{% endfor %}
+<br/><input type="submit" value="Envoyer"/>
+</form>
 
-{{ render("Controller:test") }}
+{% for field in form.getErrorsMessages() %}
+	{{ field.name }} : 
+	{% for error in field.errors %}
+		- {{ error }} <br/>
+	{% endfor %}
+{% endfor %}-->
+<!--{{ message|raw }}
 
-Test de mettre autre chose
-
-{% render Controller:test %}
-
-{{ http.request.get.teste }}
+{% for data in datas %}
+{{ data.name }}
+{% endfor %}-->
+Vue index

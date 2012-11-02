@@ -106,7 +106,7 @@ class File extends \PHPPie\Core\ArrayData {
 		$dir = (substr($dir, -1, 1) === DIRECTORY_SEPARATOR) ? $dir : $dir . DIRECTORY_SEPARATOR;
 		$name = (is_null($this->rename)) ? $this->offsetGet('name') : $this->rename;
 		
-		if(move_uploaded_file($this->offsetGet('tmp_name'), $dir . $name)
+		if(move_uploaded_file($this->offsetGet('tmp_name'), $dir . $name))
 		{
 			return true;
 		}

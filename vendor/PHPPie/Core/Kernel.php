@@ -12,6 +12,7 @@ class Kernel implements KernelInterface {
     public $dev;
     public $debug;
     public $dirFrontController;
+    public $currentRoute;
     
     public $container;
     public $autoloader;
@@ -33,36 +34,49 @@ class Kernel implements KernelInterface {
     
     public function run()
     {
+		EventHandler::fireEvent('run', array());
+		
         $request = $this->container->getService('http.request');        
         $routingURI = substr($request->getURI(), strlen(dirname($request->server->offsetGet('SCRIPT_NAME'))));
         
         EventHandler::fireEvent('getRoutingURI', array(&$routingURI));
         
-        $route = $this->container->getService('router')->resolve($routingURI);
+        $this->currentRoute = $route = $this->container->getService('router')->resolve($routingURI);
         
         if($route === false)
         {
 			EventHandler::fireEvent('routeNotFound', array(&$routingURI));
-
-			if(($pos = strpos($routingURI, '/web/')) !== false && file_exists(($pathfile = $this->dirFrontController . '/' . substr($routingURI, $pos))))
+			
+			$pathfile = $this->dirFrontController . $routingURI;
+			
+			if(($pos = strpos($routingURI, '/web/')) !== false && file_exists($pathfile))
 			{
 				EventHandler::fireEvent('assetFileFound', array(&$routingURI, &$pathfile));
+			}
+			elseif(strpos($routingURI, '/app/') !== 0 && strpos($routingURI, '/vendor/') !== 0 && file_exists($pathfile)) {
 				
-				$response = $this->container->getService('http.response');
-				$finfo = new \finfo(FILEINFO_MIME);
+				if(substr(strrchr(basename($routingURI), '.'), 1) === 'php') {
+					include $pathfile;
+					exit();
+				}
 				
-				$response->setContent(file_get_contents($pathfile));
-				
-				if(!$response->hasHeader('Content-Type'))
-					$response->setHeader('Content-Type', $finfo->file($pathfile));
-				
-				$response->send();
+				EventHandler::fireEvent('assetFileFound', array(&$routingURI, &$pathfile));
 			}
 			else
 			{
 				if(!EventHandler::fireEvent('assetFileNotFound', array(&$routingURI)))
 					throw new \PHPPie\Exception\Exception('Route not found for this URI : '.$routingURI, 404);
 			}
+			
+			$response = $this->container->getService('http.response');
+			$extension = substr(strrchr(basename($pathfile), '.'), 1);
+				
+			$response->setContent(file_get_contents($pathfile));
+				
+			if(!$response->hasHeader('Content-Type'))
+				$response->setHeader('Content-Type', $response->getMimeType($extension));
+				
+			$response->send();
 		}
 		else
 		{
@@ -78,11 +92,11 @@ class Kernel implements KernelInterface {
 				$parameters['_action'] = $data['action'];
 			}
 			
-			EventHandler::fireEvent('controllerAndActionDefined', array(&$parameters['_controller'], &$parameters['_action']));
+			EventHandler::fireEvent('controllerAndActionDefined', array(&$route, &$parameters['_controller'], &$parameters['_action'], &$parameters['_view']));
 			
 			$request->get->append($parameters);
 			
-			if(isset($parameters['_view']))
+			if(isset($parameters['_view']) && !empty($parameters['_view']))
 			{
 				$view = $parameters['_view'];
 				
@@ -199,7 +213,8 @@ class Kernel implements KernelInterface {
     public function getPathViews($real = true)
     {
         return array_merge(array(
-			$this->getPathApp($real).DIRECTORY_SEPARATOR.'views'
+			$this->getPathApp($real).DIRECTORY_SEPARATOR.'views',
+			realpath($this->dirFrontController).'/vendor/PHPPie/MVC/DefaultViews',
 		), $this->pathViews);
     }
     

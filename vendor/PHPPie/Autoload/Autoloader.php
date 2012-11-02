@@ -33,7 +33,9 @@ class Autoloader {
 	
 	public function save()
 	{
-		$this->cacheManager->add($this->idCache, $this->cache);
+		if(is_object($this->cacheManager)) {
+			$this->cacheManager->add($this->idCache, $this->cache);
+		}
 	}
 
     public function register() {

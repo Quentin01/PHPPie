@@ -215,7 +215,7 @@ class Container {
         
         foreach($service['arguments'] as &$argument)
         {
-            if($argument[0] === "%" || $argument[0] === "@")
+            if(isset($argument[0]) && ($argument[0] === "%" || $argument[0] === "@"))
             {
                 $argument = $this->getParameter($argument);
             }
